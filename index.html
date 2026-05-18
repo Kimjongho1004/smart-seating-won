@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 좌석 배치 시스템 - 교실 최적화</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #22d3ee;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --pinned-color: #f43f5e;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --sidebar-width: 400px;
+            
+            --grid-cols: 4;
+            --gap-size: 25px;
+            --print-gap: 4mm;
+            --name-font: 1.4rem;
+            --print-name-font: 12.5pt;
+            --box-padding: 20px;
+            --print-box-padding: 2mm;
+            --pin-size: 38px;
+            --pin-icon: 20px;
+        }
+
+        body { 
+            font-family: 'Pretendard', 'Malgun Gothic', sans-serif; 
+            margin: 0; display: flex; flex-direction: row-reverse; 
+            height: 100vh; background-color: var(--bg-dark); 
+            color: var(--text-main); overflow: hidden; 
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+        }
+        
+        .sidebar { 
+            width: var(--sidebar-width); background: var(--card-bg); 
+            padding: 30px; border-left: 1px solid rgba(255,255,255,0.05); 
+            display: flex; flex-direction: column; gap: 20px; 
+            overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 100; flex-shrink: 0;
+            box-sizing: border-box; 
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), margin-right 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+        }
+
+        body.intro-mode .sidebar {
+            margin-right: calc(-1 * var(--sidebar-width));
+            transform: translateX(100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        body.intro-mode #emptyState { cursor: pointer; transition: transform 0.3s ease; }
+        body.intro-mode #emptyState:hover { transform: scale(1.03); }
+        body.intro-mode .welcome-character { animation: pulse-glow-img 2s infinite; }
+        @keyframes pulse-glow-img { 
+            0% { filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3)); } 
+            50% { filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.8)); } 
+            100% { filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3)); } 
+        }
+
+        .sidebar h2 { font-size: 1.1rem; color: var(--primary); letter-spacing: 1px; margin-bottom: 8px; border-left: 4px solid var(--primary); padding-left: 12px; display: flex; align-items: center;}
+        
+        .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: border-color 0.3s; margin-bottom: 5px; }
+        .custom-input:focus { outline: none; border-color: var(--primary); }
+
+        .layout-controls { display: flex; gap: 10px; }
+        .layout-controls input { width: 50%; text-align: center; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .btn-row { display: flex; gap: 10px; }
+        .btn-row .btn { flex: 1; padding: 12px 5px; font-size: 0.95rem; }
+        .btn { padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1.05rem; }
+        .btn-main { background: var(--primary); color: #0f172a; box-shadow: 0 4px 6px rgba(34, 211, 238, 0.2); }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(34, 211, 238, 0.3); }
+        .btn-sub { background: #334155; color: white; }
+        .btn-sub:hover { background: #475569; }
+
+        .highlight-section { background: rgba(34, 211, 238, 0.03); padding: 22px; border-radius: 16px; border: 1px solid rgba(34, 211, 238, 0.15); margin: 5px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+
+        .upload-section { background: rgba(34, 211, 238, 0.08); border: 2px dashed var(--primary); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(34, 211, 238, 0.05) inset; }
+        .upload-section:hover { background: rgba(34, 211, 238, 0.15); border-style: solid; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 211, 238, 0.25); }
+        #uploadText { margin: 0; font-weight: 800; font-size: 1.15rem; color: #fff; letter-spacing: 0.5px; }
+
+        .btn-manual-grid { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 1.15rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 15px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
+        .btn-manual-grid:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
+        .btn-manual-grid:active { transform: translateY(1px); }
+
+        .btn-shuffle { background: linear-gradient(135deg, var(--primary), #0ea5e9); color: #0f172a; font-size: 1.25rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3); animation: pulse-glow 2s infinite; }
+        .btn-shuffle:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 25px rgba(34, 211, 238, 0.5); animation: none; }
+        .btn-shuffle:active { transform: translateY(1px); }
+
+        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
+        .custom-message-input:focus { outline: none; border-color: var(--primary); }
+        .usage-tips { margin-top: auto; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; border: 1px solid rgba(255,255,255,0.05); }
+        .usage-tips h3 { color: var(--primary); font-size: 1.05rem; margin: 0 0 10px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .usage-tips p { margin: 0; word-break: keep-all; }
+        .credit-btn { background: transparent; border: none; color: rgba(255, 255, 255, 0.3); font-size: 0.9rem; text-align: left; width: 100%; padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: color 0.3s; font-family: inherit; letter-spacing: 1px; box-sizing: border-box; font-weight: 500; }
+        .credit-btn:hover { color: var(--primary); }
+
+        .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+        #captureArea { width: 100%; max-width: 1200px; padding: 30px 30px 40px 30px; display: flex; flex-direction: column; align-items: center; background: var(--bg-dark); min-height: 100%; box-sizing: border-box; position: relative; }
+        .header-group { text-align: center; margin-bottom: 25px; flex-shrink: 0; }
+        #mainTitle { font-size: 3.5rem; margin: 0 0 5px 0; color: white; letter-spacing: 3px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; }
+        .class-info-text { font-size: 0.55em; color: var(--primary); font-weight: 700; margin-left: 15px; letter-spacing: 1px; white-space: nowrap; }
+        .podium { width: 350px; padding: 15px; border: 3px solid var(--primary); color: var(--primary); border-radius: 8px; text-align: center; font-weight: 800; font-size: 1.5rem; margin: 0 auto 30px auto; letter-spacing: 8px; background: rgba(34, 211, 238, 0.05); flex-shrink: 0; }
+
+        #emptyState { display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; width: 100%; margin-bottom: 30px; }
+        .welcome-character { max-width: 450px; height: auto; border-radius: 20px; filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.25)) drop-shadow(0 15px 25px rgba(0,0,0,0.6)); animation: float 4s ease-in-out infinite; }
+        .welcome-text { margin-top: 30px; font-size: 1.2rem; color: var(--text-dim); text-align: center; line-height: 1.6; letter-spacing: 1px; font-weight: 600; }
+        .welcome-text span { color: var(--primary); font-weight: 800; }
+        
+        .seating-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), 1fr); gap: var(--gap-size); width: 100%; flex-grow: 1; align-content: start; }
+        
+        .seat-box { position: relative; background: var(--card-bg); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--box-padding); box-shadow: 0 4px 8px rgba(0,0,0,0.3); cursor: grab; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1.2), opacity 0.5s ease, filter 0.5s ease; }
+        .seat-box:active { cursor: grabbing; }
+        .seat-box.is-pinned { border: 3px solid var(--pinned-color); box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+        .seat-box.empty-seat { background: rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.1); box-shadow: none; cursor: grab; }
+        .empty-seat-text { color: rgba(255,255,255,0.3); font-size: calc(var(--name-font) * 0.7); font-weight: 700; pointer-events: none; text-align: center; line-height: 1.4; }
+
+        .student-img { width: 100%; aspect-ratio: 1 / 1.1; object-fit: cover; object-position: center 8%; border-radius: 12px; background: #2d3748; pointer-events: none; transition: opacity 0.3s; }
+        .student-name { margin-top: 10px; font-weight: 700; font-size: var(--name-font); letter-spacing: 1px; pointer-events: none; transition: all 0.3s; }
+        
+        .seating-grid.hide-photos .student-img { display: none !important; }
+        .seating-grid.hide-photos .student-name { font-size: calc(var(--name-font) * 2.2) !important; margin-top: 0 !important; color: var(--primary); }
+        .seating-grid.hide-photos .seat-box { aspect-ratio: 2/1; }
+
+        .edit-name-input {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 85%; padding: 12px 5px; font-size: 1.2rem; font-weight: 700; text-align: center;
+            border: 3px solid var(--primary); border-radius: 8px; background: var(--bg-dark); color: white;
+            z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit;
+        }
+
+        .pin-btn-container { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 50%; transition: 0.2s; }
+        .pin-btn-container:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
+        .pin-icon { font-size: var(--pin-icon); color: white; }
+
+        .message-display { width: 100%; text-align: left; margin-top: 20px; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; color: var(--primary); white-space: pre-line; letter-spacing: 1px; line-height: 1.4; box-sizing: border-box; padding: 12px 20px; border: 2px dashed rgba(34, 211, 238, 0.5); border-radius: 12px; background: rgba(34, 211, 238, 0.05); display: none; }
+        .school-logo-container { margin-top: auto; padding-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
+        .school-logo { max-width: 250px; height: auto; background-color: #ffffff; padding: 8px 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); opacity: 0.95; }
+        .seat-box.hidden-state { opacity: 0; transform: scale(0.4) translateY(60px); filter: blur(8px); }
+        
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-body { background: var(--card-bg); padding: 40px; border-radius: 16px; width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        .modal-body h3 { font-size: 1.4rem; }
+        
+        #customToast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); color: var(--primary); padding: 18px 40px; border-radius: 30px; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.6); font-size: 1.2rem; font-weight: 700; opacity: 0; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease; z-index: 9999; pointer-events: none; letter-spacing: 1px; text-align: center; white-space: pre-line; }
+        #customToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ========================================================
+           [긴장감 유발!] 카운트다운 오버레이 UI 
+           ======================================================== */
+        #countdownOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.85); /* 칠흑같이 어두워지는 효과 */
+            z-index: 9999; display: none; justify-content: center; align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        #countdownText {
+            font-size: 20rem; font-weight: 900; color: var(--primary);
+            text-shadow: 0 0 50px rgba(34, 211, 238, 0.6);
+            opacity: 0; transform: scale(0.5);
+        }
+        /* 심장 박동처럼 쿵! 하고 나타났다 사라지는 애니메이션 */
+        @keyframes countAnim {
+            0% { transform: scale(0.3); opacity: 0; }
+            20% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        /* ======================================================== */
+
+        @media screen {
+            body.fit-screen .main-content { padding: 0; overflow: hidden; }
+            body.fit-screen #captureArea { height: 100vh; padding: 2vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; max-width: none; }
+            body.fit-screen .header-group { margin-bottom: 1vh; }
+            body.fit-screen #mainTitle { font-size: 4vh; margin: 0; }
+            body.fit-screen .podium { padding: 1vh; font-size: 2.5vh; margin: 1vh auto 2vh auto; width: 300px; }
+            body.fit-screen .seating-grid { flex: 1 1 0; min-height: 0; display: grid; gap: 1.5vh; align-content: stretch; grid-auto-rows: minmax(0, 1fr); }
+            body.fit-screen .seat-box { padding: 1vh; height: 100%; min-height: 0; box-sizing: border-box; justify-content: center; }
+            body.fit-screen .student-img { flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; aspect-ratio: 1 / 1.1; object-fit: cover; object-position: center 8%; margin: 0 auto; border-radius: 8px; }
+            body.fit-screen .student-name { flex-shrink: 0; font-size: min(1.3rem, 2.8vh); margin-top: 1vh; }
+            body.fit-screen .message-display { font-size: min(1.1rem, 2vh); padding: 1vh 2vw; margin-top: 1vh; }
+        }
+
+        @media print {
+            html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: hidden !important; }
+            .sidebar, #modal, .pin-btn-container, #emptyState, .credit-btn, #customToast, #countdownOverlay { display: none !important; }
+            .main-content { padding: 0 !important; display: flex !important; width: 100% !important; height: 100% !important; }
+            #captureArea { width: 100% !important; height: 100% !important; max-width: none !important; padding: 4mm !important; background: white !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; }
+            .header-group { flex-shrink: 0 !important; margin-bottom: 1mm !important; }
+            #mainTitle { font-size: 24pt !important; color: black !important; margin-bottom: 1mm !important; letter-spacing: 1px !important; }
+            .class-info-text { color: #333 !important; }
+            .podium { flex-shrink: 0 !important; border: 1.5px solid black !important; color: black !important; padding: 2mm !important; font-size: 13pt !important; margin: 3mm auto !important; width: 50% !important; background: transparent !important; letter-spacing: 5px !important; }
+            .message-display { flex-shrink: 0 !important; margin: 2mm 0 !important; font-size: 12pt !important; color: black !important; font-weight: 800 !important; text-align: left !important; padding: 2mm 4mm !important; border: 1.5px solid black !important; border-radius: 8px !important; background: white !important; }
+            .school-logo-container { flex-shrink: 0 !important; margin-top: auto !important; padding: 2mm 0 !important; display: flex !important; }
+            .school-logo { max-width: 200px !important; opacity: 1 !important; border-radius: 0 !important; padding: 0 !important; box-shadow: none !important; }
+            .seating-grid { flex: 1 1 0 !important; min-height: 0 !important; display: grid !important; gap: var(--print-gap) !important; align-content: stretch !important; grid-auto-rows: minmax(0, 1fr) !important; }
+            .seat-box { border: 1.5px solid black !important; background: white !important; box-shadow: none !important; padding: var(--print-box-padding) !important; border-radius: 8px !important; page-break-inside: avoid; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; height: 100% !important; box-sizing: border-box !important; min-height: 0 !important; overflow: hidden !important; }
+            .seat-box.empty-seat { border: 1.5px dashed #ccc !important; }
+            .empty-seat-text { display: none !important; }
+            .student-img { flex: 1 1 0 !important; min-height: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center 8% !important; background: transparent !important; border-radius: 6px !important; }
+            .student-name { flex-shrink: 0 !important; font-size: var(--print-name-font) !important; color: black !important; margin-top: 1mm !important; line-height: 1.2 !important; }
+            .seating-grid.hide-photos .student-name { font-size: calc(var(--print-name-font) * 1.8) !important; margin-top: 0 !important; }
+        }
+    </style>
+    <style id="dynamicPrintStyle"> @media print { @page { size: A4 portrait; margin: 5mm; } } </style>
+</head>
+<body id="bodyTag" class="intro-mode">
+
+    <aside class="sidebar">
+        <section>
+            <h2>학급 정보 입력</h2>
+            <input type="text" id="classInfoInput" class="custom-input" placeholder="예) 의료전기전자과 2학년 2반" autocomplete="off">
+        </section>
+
+        <section>
+            <h2>좌석 레이아웃 <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal; margin-left: 6px;">(미입력 시 자동 최적화)</span></h2>
+            <div class="layout-controls">
+                <input type="number" id="colInput" class="custom-input" min="2" max="10" placeholder="가로칸" title="가로 줄 수">
+                <input type="number" id="rowInput" class="custom-input" min="2" max="10" placeholder="세로칸" title="세로 줄 수">
+            </div>
+            <button class="btn btn-sub" style="width:100%; padding: 10px;" onclick="applyLayoutSettings()">격자 적용 / 초기화</button>
+        </section>
+
+        <section class="highlight-section" style="border-color: rgba(16, 185, 129, 0.3);">
+            <h2 style="margin-top: 0; color: #10b981; font-size: 1.2rem;">[STEP 1] 명단 준비 (택 1)</h2>
+            
+            <div class="upload-section" onclick="document.getElementById('photoInput').click()">
+                <p id="uploadText">📁 1. 학생 사진 폴더 선택</p>
+                <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
+            </div>
+            
+            <button class="btn-manual-grid" onclick="generateEmptyGrid()">📝 2. 사진 없이 직접 좌석표 만들기</button>
+        </section>
+
+        <section class="highlight-section">
+            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.2rem;">[STEP 2] 배치 실행</h2>
+            <div class="btn-group">
+                <button class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">🎲 무작위 배치 시작</button>
+                <button class="btn btn-sub" style="font-size: 0.95rem; padding: 12px; margin-top: 5px;" onclick="resetPins()">모든 고정 해제</button>
+                <button id="fitScreenBtn" class="btn btn-sub" style="width: 100%; margin-top: 5px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 교실보기 (한 화면에 맞춤) : OFF</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>출력용 하단 메시지</h2>
+            <textarea id="messageInput" class="custom-message-input" placeholder="출력물 하단 당부 말씀&#10;예) 허락 없는 자리 이동 금지"></textarea>
+        </section>
+
+        <section>
+            <h2>화면 및 출력 설정</h2>
+            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
+                <input type="checkbox" id="hidePhotoCheck" style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
+                <span style="font-size: 1.05rem;">사진 숨기기 (이름만 크게 / <span style="color:var(--primary); font-weight:bold;">가로 인쇄</span>)</span>
+            </label>
+            <div class="btn-group">
+                <button class="btn btn-sub" onclick="openModal('student')">학생용 시점 출력</button>
+                <button class="btn btn-sub" onclick="openModal('teacher')">교사용 시점 출력</button>
+            </div>
+        </section>
+
+        <section>
+            <h2>현재 배치 저장 & 불러오기</h2>
+            <div class="btn-group">
+                <div class="btn-row">
+                    <button class="btn btn-sub" style="border: 1px solid var(--primary); color: var(--primary);" onclick="downloadBackupFile()">⬇️ 백업 다운로드</button>
+                    <button class="btn btn-sub" style="border: 1px solid #f43f5e; color: #f43f5e;" onclick="document.getElementById('backupInput').click()">⬆️ 백업 불러오기</button>
+                    <input type="file" id="backupInput" accept=".json" style="display:none">
+                </div>
+            </div>
+        </section>
+
+        <div class="usage-tips">
+            <h3>사용 안내 및 팁</h3>
+            <p style="margin:0; line-height:1.6; word-break:keep-all;">
+                💡 <strong>[이름 직접 입력]</strong> 좌석을 <strong>더블클릭</strong>하면 언제든지 이름을 직접 입력하거나 수정할 수 있습니다.<br><br>
+                📂 파일명은 '이름.jpg' 또는 '번호.이름.jpg' 모두 가능합니다.<br><br>
+                💾 <strong>[백업 다운로드]</strong>를 누르면 학급 이름으로 파일이 생성되어 USB에 저장해 두시면 언제든 다시 불러올 수 있습니다!
+            </p>
+        </div>
+        
+        <button class="credit-btn" onclick="saveSecretPlan()">© Made by KimJongho</button>
+
+    </aside>
+
+    <main class="main-content">
+        <div id="captureArea">
+            <div class="header-group">
+                <h1 id="mainTitle">좌석 배치도</h1>
+            </div>
+            <div id="dynamicPodium" class="podium">교 탁</div>
+            
+            <div id="emptyState" onclick="startApp()">
+                <img src="캐릭터기본형.png" alt="캐릭터" class="welcome-character">
+                <div id="introText" class="welcome-text">
+                    <span style="font-size: 1.4rem; color: #10b981;">👇 좌석 배치를 시작하려면 위 이미지를 클릭하세요! 👇</span>
+                </div>
+                <div id="mainText" class="welcome-text" style="display: none;">
+                    우측 메뉴의 <span style="color:#10b981;">[STEP 1]</span> 영역에서<br>사진을 넣거나 빈 좌석표를 만들어 주세요!
+                </div>
+            </div>
+            
+            <div id="seatGrid" class="seating-grid"></div>
+            <div id="customMessageDisplay" class="message-display"></div>
+            <div id="bottomLogo" class="school-logo-container" style="display: none;">
+                <img src="한국의료마이스터고등학교_시그니처(좌우조합).jpg" class="school-logo" alt="로고">
+            </div>
+        </div>
+    </main>
+
+    <div id="modal">
+        <div class="modal-body">
+            <h3 style="margin-top:0; color:var(--primary); margin-bottom:25px;">출력 방식 선택</h3>
+            <div class="btn-group">
+                <button class="btn btn-main" onclick="runAction('print')">A4 인쇄 바로가기</button>
+                <button class="btn btn-sub" onclick="runAction('download')">이미지(PNG) 저장</button>
+                <button class="btn btn-sub" style="background:transparent; border:1px solid #475569;" onclick="closeModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdownOverlay">
+        <div id="countdownText">3</div>
+    </div>
+
+    <div id="customToast"></div>
+
+    <script>
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        function startApp() {
+            if (!document.body.classList.contains('intro-mode')) return;
+            document.body.classList.remove('intro-mode');
+            document.getElementById('introText').style.display = 'none';
+            document.getElementById('mainText').style.display = 'block';
+        }
+
+        document.getElementById('classInfoInput').addEventListener('input', e => {
+            const classInfo = e.target.value.trim();
+            const titleEl = document.getElementById('mainTitle');
+            titleEl.innerHTML = classInfo ? `좌석 배치도 <span class="class-info-text">(${classInfo})</span>` : '좌석 배치도';
+        });
+
+        document.getElementById('messageInput').addEventListener('input', e => {
+            const text = e.target.value.trim();
+            const displayEl = document.getElementById('customMessageDisplay');
+            displayEl.innerText = text ? '📢 ' + text : '';
+            displayEl.style.display = text ? 'block' : 'none';
+        });
+
+        document.getElementById('hidePhotoCheck').addEventListener('change', e => {
+            const grid = document.getElementById('seatGrid');
+            const printStyle = document.getElementById('dynamicPrintStyle');
+            if(e.target.checked) {
+                grid.classList.add('hide-photos');
+                printStyle.innerHTML = '@media print { @page { size: A4 landscape; margin: 5mm; } }';
+            } else {
+                grid.classList.remove('hide-photos');
+                printStyle.innerHTML = '@media print { @page { size: A4 portrait; margin: 5mm; } }';
+            }
+            applyGridStyle();
+        });
+
+        let students = []; let seats = []; let draggedIndex = null;
+        let currentCols = 4; let currentRows = 4;
+        let isFitScreen = false;
+        let isShuffling = false; // 카운트다운 중 중복 클릭 방지
+
+        const defaultAvatar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjY2Ij48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI2NiIgZmlsbD0iIzJkMzc0OCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjExMCIgcj0iNDUiIGZpbGw9IiM0YTU1NjgiLz48cGF0aCBkPSJNMzAgMjY2YzAtNDAgMzAtNzAgNzAtNzBoMGM0MCAwIDcwIDMwIDcwIDcwWiIgZmlsbD0iIzRhNTU2OCIvPjwvc3ZnPg==';
+
+        function getOptimalGrid(count) {
+            if (count === 0) return { cols: 4, rows: 4 };
+            let c = Math.ceil(Math.sqrt(count));
+            let r = c;
+            if (c * (r - 1) >= count) r--;
+            return { cols: c, rows: r };
+        }
+
+        function applyGridStyle() {
+            const root = document.documentElement;
+            const isHide = document.getElementById('hidePhotoCheck').checked;
+            root.style.setProperty('--grid-cols', currentCols);
+            const total = currentCols * currentRows;
+            if (total > 25) {
+                root.style.setProperty('--gap-size', '12px');
+                root.style.setProperty('--print-name-font', isHide ? '18pt' : '10pt');
+            } else {
+                root.style.setProperty('--gap-size', '25px');
+                root.style.setProperty('--print-name-font', isHide ? '24pt' : '12.5pt');
+            }
+        }
+
+        function applyLayoutSettings() {
+            const colVal = parseInt(document.getElementById('colInput').value);
+            const rowVal = parseInt(document.getElementById('rowInput').value);
+            if (isNaN(colVal) || isNaN(rowVal)) {
+                if (students.length > 0) {
+                    const opt = getOptimalGrid(students.length);
+                    currentCols = opt.cols; currentRows = opt.rows;
+                }
+            } else {
+                if (students.length > (colVal * rowVal)) {
+                    const opt = getOptimalGrid(students.length);
+                    currentCols = opt.cols; currentRows = opt.rows;
+                    alert("자리가 부족하여 격자를 자동 최적화했습니다.");
+                } else {
+                    currentCols = colVal; currentRows = rowVal;
+                }
+            }
+            document.getElementById('colInput').value = currentCols;
+            document.getElementById('rowInput').value = currentRows;
+            applyGridStyle(); rebuildSeatsArray(); renderGrid(true);
+        }
+
+        document.getElementById('photoInput').addEventListener('change', e => {
+            startApp();
+            const files = Array.from(e.target.files);
+            if (files.length === 0) return;
+            document.getElementById('emptyState').style.display = 'none';
+            
+            students = files.map(file => {
+                const lastDotIndex = file.name.lastIndexOf('.');
+                const nameOnly = (lastDotIndex === -1) ? file.name : file.name.substring(0, lastDotIndex);
+                return { name: nameOnly, imgSrc: URL.createObjectURL(file), isPinned: false };
+            });
+            
+            const opt = getOptimalGrid(students.length);
+            currentCols = opt.cols; currentRows = opt.rows;
+            document.getElementById('colInput').value = currentCols;
+            document.getElementById('rowInput').value = currentRows;
+            
+            applyGridStyle(); rebuildSeatsArray(); renderGrid(false);
+            document.getElementById('uploadText').innerText = `✅ ${students.length}명 사진 완료`;
+        });
+
+        function generateEmptyGrid() {
+            startApp(); 
+            document.getElementById('emptyState').style.display = 'none';
+            currentCols = parseInt(document.getElementById('colInput').value) || 4;
+            currentRows = parseInt(document.getElementById('rowInput').value) || 4;
+            applyGridStyle();
+            
+            const total = currentCols * currentRows;
+            seats = Array(total).fill(null).map(() => ({ type: 'empty' }));
+            syncStudentsArray();
+            renderGrid(true);
+        }
+
+        function syncStudentsArray() {
+            students = seats.filter(s => s.type === 'student').map(s => ({ name: s.name, imgSrc: s.imgSrc, isPinned: s.isPinned }));
+            if(students.length > 0) {
+                document.getElementById('uploadText').innerText = `✅ ${students.length}명 등록됨`;
+            } else {
+                document.getElementById('uploadText').innerText = `📁 1. 학생 사진 폴더 선택`;
+            }
+        }
+
+        function rebuildSeatsArray() {
+            const total = currentCols * currentRows;
+            seats = Array(total).fill(null).map(() => ({ type: 'empty' }));
+            const emptyCount = total - students.length;
+            const leftE = Math.floor(emptyCount / 2);
+            const rightE = Math.ceil(emptyCount / 2);
+            let sIdx = 0;
+            for (let i = 0; i < total; i++) {
+                const isLast = i >= (currentRows - 1) * currentCols;
+                const colIdx = i % currentCols;
+                if (isLast && (colIdx < leftE || colIdx >= currentCols - rightE)) {
+                    seats[i] = { type: 'empty' };
+                } else if (sIdx < students.length) {
+                    seats[i] = { type: 'student', ...students[sIdx++] };
+                }
+            }
+        }
+
+        function renderGrid(anim = false) {
+            const grid = document.getElementById('seatGrid');
+            grid.innerHTML = '';
+            seats.forEach((seat, idx) => {
+                const div = document.createElement('div');
+                div.className = 'seat-box';
+                div.setAttribute('draggable', 'true');
+                
+                div.ondblclick = (e) => makeEditable(e, idx);
+
+                if (seat.type === 'student') {
+                    if (seat.isPinned) div.classList.add('is-pinned');
+                    div.innerHTML = `<div class="pin-btn-container" onclick="togglePin(event, ${idx})"><span class="pin-icon">${seat.isPinned ? '📌' : '📍'}</span></div>
+                                     <img class="student-img" src="${seat.imgSrc}"><div class="student-name">${seat.name}</div>`;
+                } else {
+                    div.classList.add('empty-seat');
+                    div.innerHTML = `<span class="empty-seat-text"><span style="font-size:1.5rem">+</span><br>더블클릭 입력</span>`;
+                }
+                
+                if (anim && !(seat.isPinned)) div.classList.add('hidden-state');
+                
+                div.addEventListener('dragstart', () => draggedIndex = idx);
+                div.addEventListener('dragover', e => e.preventDefault());
+                div.addEventListener('drop', () => {
+                    if (draggedIndex !== null && draggedIndex !== idx) {
+                        [seats[draggedIndex], seats[idx]] = [seats[idx], seats[draggedIndex]];
+                        renderGrid(false);
+                    }
+                });
+                grid.appendChild(div);
+            });
+            
+            if (anim) {
+                let delayCount = 0;
+                document.querySelectorAll('.seat-box').forEach((box) => {
+                    if (box.classList.contains('hidden-state')) {
+                        setTimeout(() => box.classList.remove('hidden-state'), delayCount * 250);
+                        delayCount++;
+                    }
+                });
+            }
+        }
+
+        function makeEditable(e, idx) {
+            if (window.isEditing) return;
+            window.isEditing = true;
+            const box = e.currentTarget;
+            const currentName = seats[idx].type === 'student' ? seats[idx].name : '';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentName;
+            input.className = 'edit-name-input';
+            input.placeholder = "이름 입력";
+            
+            input.addEventListener('mousedown', ev => ev.stopPropagation());
+            
+            box.appendChild(input);
+            input.focus();
+            
+            const saveHandler = () => {
+                if(!window.isEditing) return;
+                window.isEditing = false;
+                const newName = input.value.trim();
+                if (newName === '') {
+                    seats[idx] = { type: 'empty' };
+                } else {
+                    let imgSrc = seats[idx].imgSrc || defaultAvatar; 
+                    seats[idx] = { type: 'student', name: newName, imgSrc: imgSrc, isPinned: seats[idx].isPinned || false };
+                }
+                syncStudentsArray();
+                renderGrid(false);
+            };
+
+            input.addEventListener('blur', saveHandler);
+            input.addEventListener('keydown', (ev) => { if(ev.key === 'Enter') { saveHandler(); } });
+        }
+
+        function togglePin(e, idx) { e.stopPropagation(); if (seats[idx].type === 'student') { seats[idx].isPinned = !seats[idx].isPinned; renderGrid(false); } }
+        function resetPins() { seats.forEach(s => {if(s.type==='student') s.isPinned = false;}); renderGrid(false); }
+        
+
+        // ========================================================
+        // [위장 이스터에그 + 카운트다운 로직]
+        // ========================================================
+        function saveSecretPlan() {
+            if (seats.length === 0) return;
+            
+            const secretPlanNames = seats.map(s => s.type === 'student' ? s.name : "X");
+            localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
+            
+            // 완벽한 위장을 위한 훈훈한 평범 메시지
+            showCustomToast("스마트 좌석 배치 시스템 v2.0\n선생님, 오늘 하루도 응원합니다! ✨");
+        }
+
+        function triggerAnimation(element) {
+            // CSS 애니메이션을 강제로 재시작하는 트릭
+            element.style.animation = 'none';
+            element.offsetHeight; /* trigger reflow */
+            element.style.animation = 'countAnim 1s ease-in-out forwards';
+        }
+
+        // [핵심] 배치 시작을 누르면 무조건 이 함수가 먼저 실행됩니다.
+        function startCountdownAndShuffle(event) {
+            if (students.length === 0 || isShuffling) return;
+            isShuffling = true;
+            
+            // Ctrl 키를 눌렀는지 여부를 카운트다운 시작 전에 미리 기억해둡니다.
+            const isCtrlPressed = event && event.ctrlKey;
+            
+            const overlay = document.getElementById('countdownOverlay');
+            const countText = document.getElementById('countdownText');
+            
+            overlay.style.display = 'flex';
+            let count = 3;
+            countText.innerText = count;
+            triggerAnimation(countText);
+            
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countText.innerText = count;
+                    triggerAnimation(countText);
+                } else {
+                    clearInterval(countdownInterval);
+                    overlay.style.display = 'none';
+                    
+                    // 카운트다운이 끝나면 실제 셔플(혹은 비밀 배치) 실행!
+                    executeActualShuffle(isCtrlPressed);
+                    isShuffling = false;
+                }
+            }, 1000);
+        }
+
+        // 실제 셔플을 처리하는 함수 (기존 shuffleSeats 역할)
+        function executeActualShuffle(isCtrlPressed) {
+            // 이스터에그 발동 (Ctrl 키를 누른 상태였던 경우)
+            if (isCtrlPressed) {
+                const savedPlan = localStorage.getItem('secretSeatingPlan');
+                if (savedPlan) {
+                    try {
+                        const planNames = JSON.parse(savedPlan);
+                        let newSeats = planNames.map(name => {
+                            if (name === "X") return { type: 'empty' };
+                            const foundStudent = students.find(st => st.name === name);
+                            return foundStudent ? { type: 'student', ...foundStudent, isPinned: false } : { type: 'empty' };
+                        });
+                        
+                        if (newSeats.length === seats.length) {
+                            seats = newSeats;
+                            renderGrid(true); // 애니메이션 켜서 무작위인 척
+                            // 알림 메시지 일절 없음! 완벽 범죄 성립!
+                            return; 
+                        }
+                    } catch(e) {
+                        console.error("배치 오류", e);
+                    }
+                }
+            }
+
+            // 진짜 무작위 셔플
+            const freeIdx = []; const freeStuds = [];
+            seats.forEach((s, i) => { if (s.type === 'student' && !s.isPinned) { freeIdx.push(i); freeStuds.push(s); } });
+            
+            for (let i = freeStuds.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [freeStuds[i], freeStuds[j]] = [freeStuds[j], freeStuds[i]];
+            }
+            
+            freeIdx.forEach((idx, i) => seats[idx] = freeStuds[i]);
+            renderGrid(true);
+        }
+        // ========================================================
+
+
+        function showCustomToast(msg) {
+            const toast = document.getElementById('customToast');
+            toast.innerText = msg;
+            toast.classList.add('show'); 
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        function downloadBackupFile() {
+            if (seats.length === 0 || students.length === 0) {
+                return showCustomToast("먼저 사진이나 이름을 입력하고 배치를 완성해 주세요.");
+            }
+            const classInfo = document.getElementById('classInfoInput').value.trim();
+            const fileName = classInfo ? `${classInfo}_좌석백업.json` : "좌석배치백업.json";
+            
+            const planNames = seats.map(s => s.type === 'student' ? s.name : "X");
+            const payload = { c: currentCols, r: currentRows, p: planNames };
+            
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", fileName);
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+            
+            showCustomToast(`✅ [${fileName}] 파일이 다운로드되었습니다.\nUSB에 저장해 두시면 다른 컴퓨터에서도 불러올 수 있습니다.`);
+        }
+
+        document.getElementById('backupInput').addEventListener('change', function(e) {
+            startApp(); 
+            
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    const savedData = JSON.parse(event.target.result);
+                    currentCols = savedData.c; currentRows = savedData.r;
+                    document.getElementById('colInput').value = currentCols;
+                    document.getElementById('rowInput').value = currentRows;
+                    applyGridStyle();
+                    
+                    document.getElementById('emptyState').style.display = 'none';
+
+                    seats = savedData.p.map(name => {
+                        if (name === "X") return { type: 'empty' };
+                        const foundStudent = students.find(st => st.name === name);
+                        return foundStudent ? { type: 'student', ...foundStudent, isPinned: false } 
+                                            : { type: 'student', name: name, imgSrc: defaultAvatar, isPinned: false };
+                    });
+                    
+                    syncStudentsArray();
+                    renderGrid(true);
+                    showCustomToast("✨ 백업 파일의 배치를 성공적으로 불러왔습니다!");
+                } catch(err) {
+                    showCustomToast("파일을 읽을 수 없습니다. 올바른 백업 파일인지 확인해 주세요.");
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = ''; 
+        });
+
+        function toggleFitScreen() {
+            isFitScreen = !isFitScreen;
+            const body = document.getElementById('bodyTag');
+            const btn = document.getElementById('fitScreenBtn');
+            if (isFitScreen) {
+                body.classList.add('fit-screen');
+                btn.innerHTML = '🖥️ 교실보기 (한 화면에 맞춤) : ON';
+                btn.style.background = 'var(--primary)';
+                btn.style.color = '#0f172a';
+            } else {
+                body.classList.remove('fit-screen');
+                btn.innerHTML = '🖥️ 교실보기 (한 화면에 맞춤) : OFF';
+                btn.style.background = 'transparent';
+                btn.style.color = 'var(--primary)';
+            }
+        }
+
+        function openModal(mode) { window.currentMode = mode; document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+
+        function runAction(type) {
+            const grid = document.getElementById('seatGrid');
+            const podium = document.getElementById('dynamicPodium');
+            const area = document.getElementById('captureArea');
+            const isT = (window.currentMode === 'teacher');
+            if (isT) {
+                const clones = Array.from(grid.children).reverse();
+                grid.innerHTML = ''; clones.forEach(c => grid.appendChild(c));
+                podium.style.setProperty('margin', '20px auto 30px auto', 'important');
+                grid.insertAdjacentElement('afterend', podium);
+            }
+            closeModal();
+            if (type === 'print') {
+                setTimeout(() => { window.print(); restoreLayout(isT); }, 500);
+            } else {
+                document.getElementById('bottomLogo').style.display = 'flex';
+                html2canvas(area, { scale: 2 }).then(canvas => {
+                    const a = document.createElement('a'); a.href = canvas.toDataURL(); a.download = '좌석배치도.png'; a.click();
+                    document.getElementById('bottomLogo').style.display = 'none';
+                    restoreLayout(isT);
+                });
+            }
+        }
+        function restoreLayout(isT) {
+            if (isT) {
+                const grid = document.getElementById('seatGrid');
+                const clones = Array.from(grid.children).reverse();
+                grid.innerHTML = ''; clones.forEach(c => grid.appendChild(c));
+                const podium = document.getElementById('dynamicPodium');
+                podium.style.setProperty('margin', '0 auto 30px auto', 'important');
+                document.getElementById('captureArea').insertBefore(podium, document.getElementById('emptyState'));
+            }
+        }
+        applyGridStyle();
+    </script>
+</body>
+</html>
