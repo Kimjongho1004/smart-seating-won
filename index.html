@@ -13,7 +13,7 @@
             --pinned-color: #f43f5e;
             --text-main: #f1f5f9;
             --text-dim: #94a3b8;
-            --sidebar-width: 400px;
+            --sidebar-width: 420px;
             
             --grid-cols: 4;
             --gap-size: 25px;
@@ -36,18 +36,21 @@
         
         .sidebar { 
             width: var(--sidebar-width); background: var(--card-bg); 
-            padding: 30px; border-left: 1px solid rgba(255,255,255,0.05); 
+            padding: 25px; border-left: 1px solid rgba(255,255,255,0.05); 
             display: flex; flex-direction: column; gap: 20px; 
             overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 100; flex-shrink: 0;
             box-sizing: border-box; 
             transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), margin-right 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
         }
 
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
         body.intro-mode .sidebar {
             margin-right: calc(-1 * var(--sidebar-width));
-            transform: translateX(100%);
-            opacity: 0;
-            pointer-events: none;
+            transform: translateX(100%); opacity: 0; pointer-events: none;
         }
 
         body.intro-mode #emptyState { cursor: pointer; transition: transform 0.3s ease; }
@@ -58,8 +61,6 @@
             50% { filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.8)); } 
             100% { filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3)); } 
         }
-
-        .sidebar h2 { font-size: 1.1rem; color: var(--primary); letter-spacing: 1px; margin-bottom: 8px; border-left: 4px solid var(--primary); padding-left: 12px; display: flex; align-items: center;}
         
         .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: border-color 0.3s; margin-bottom: 5px; }
         .custom-input:focus { outline: none; border-color: var(--primary); }
@@ -68,7 +69,7 @@
         .layout-controls input { width: 50%; text-align: center; }
 
         .btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .btn-row { display: flex; gap: 10px; }
+        .btn-row { display: flex; gap: 10px; width: 100%; }
         .btn-row .btn { flex: 1; padding: 12px 5px; font-size: 0.95rem; }
         .btn { padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1.05rem; }
         .btn-main { background: var(--primary); color: #0f172a; box-shadow: 0 4px 6px rgba(34, 211, 238, 0.2); }
@@ -76,26 +77,47 @@
         .btn-sub { background: #334155; color: white; }
         .btn-sub:hover { background: #475569; }
 
-        .highlight-section { background: rgba(34, 211, 238, 0.03); padding: 22px; border-radius: 16px; border: 1px solid rgba(34, 211, 238, 0.15); margin: 5px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .highlight-section { padding: 22px; border-radius: 16px; margin: 5px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 1px solid; }
+        .step1 { background: rgba(139, 92, 246, 0.03); border-color: rgba(139, 92, 246, 0.25); }
+        .step2 { background: rgba(16, 185, 129, 0.03); border-color: rgba(16, 185, 129, 0.25); }
+        .step3 { background: rgba(34, 211, 238, 0.03); border-color: rgba(34, 211, 238, 0.25); }
+        .step4 { background: rgba(244, 63, 94, 0.03); border-color: rgba(244, 63, 94, 0.25); }
 
-        .upload-section { background: rgba(34, 211, 238, 0.08); border: 2px dashed var(--primary); border-radius: 12px; padding: 25px 15px; text-align: center; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(34, 211, 238, 0.05) inset; }
-        .upload-section:hover { background: rgba(34, 211, 238, 0.15); border-style: solid; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(34, 211, 238, 0.25); }
-        #uploadText { margin: 0; font-weight: 800; font-size: 1.15rem; color: #fff; letter-spacing: 0.5px; }
-
-        .btn-manual-grid { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 1.15rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 15px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
-        .btn-manual-grid:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4); }
-        .btn-manual-grid:active { transform: translateY(1px); }
-
-        .btn-shuffle { background: linear-gradient(135deg, var(--primary), #0ea5e9); color: #0f172a; font-size: 1.25rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3); animation: pulse-glow 2s infinite; }
+        .choice-group { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .step2-choice-btn {
+            background: rgba(16, 185, 129, 0.06); 
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 18px 25px; 
+            color: var(--text-main);
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            box-sizing: border-box;
+            letter-spacing: 0.5px;
+        }
+        .step2-choice-btn:hover { background: rgba(16, 185, 129, 0.15); border-color: #10b981; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25); }
+        .step2-choice-btn:active { transform: translateY(1px); }
+        
+        .btn-shuffle { background: linear-gradient(135deg, var(--primary), #0ea5e9); color: #0f172a; font-size: 1.15rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3); animation: pulse-glow 2s infinite; width: 100%;}
         .btn-shuffle:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 8px 25px rgba(34, 211, 238, 0.5); animation: none; }
-        .btn-shuffle:active { transform: translateY(1px); }
+        
+        .btn-step4 { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; font-size: 1.05rem; font-weight: 800; padding: 15px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center; flex: 1;}
+        .btn-step4:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 25px rgba(244, 63, 94, 0.4); }
 
         .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
-        .custom-message-input:focus { outline: none; border-color: var(--primary); }
-        .usage-tips { margin-top: auto; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.9rem; color: #cbd5e1; line-height: 1.7; border: 1px solid rgba(255,255,255,0.05); }
-        .usage-tips h3 { color: var(--primary); font-size: 1.05rem; margin: 0 0 10px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .custom-message-input:focus { outline: none; border-color: #f43f5e; }
+        
+        .usage-tips { margin-top: auto; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.7; border: 1px solid rgba(255,255,255,0.05); }
+        .usage-tips h3 { color: var(--primary); font-size: 0.95rem; margin: 0 0 10px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; font-weight: 700; }
         .usage-tips p { margin: 0; word-break: keep-all; }
-        .credit-btn { background: transparent; border: none; color: rgba(255, 255, 255, 0.3); font-size: 0.9rem; text-align: left; width: 100%; padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: color 0.3s; font-family: inherit; letter-spacing: 1px; box-sizing: border-box; font-weight: 500; }
+        
+        .credit-btn { background: transparent; border: none; color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; text-align: left; width: 100%; padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: color 0.3s; font-family: inherit; letter-spacing: 1px; box-sizing: border-box; font-weight: 500; }
         .credit-btn:hover { color: var(--primary); }
 
         .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
@@ -112,18 +134,59 @@
         
         .seating-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), 1fr); gap: var(--gap-size); width: 100%; flex-grow: 1; align-content: start; }
         
-        .seat-box { position: relative; background: var(--card-bg); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: var(--box-padding); box-shadow: 0 4px 8px rgba(0,0,0,0.3); cursor: grab; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1.2), opacity 0.5s ease, filter 0.5s ease; }
+        /* 🖥️ [일반 모니터 화면] 가로형 배치 + 하단 1/3 커팅 (선생님 대만족 스타일 고정) */
+        .seat-box { 
+            position: relative; 
+            background: var(--card-bg); 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: row-reverse; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3); 
+            cursor: grab; 
+            transition: transform 0.6s, opacity 0.5s, filter 0.5s; 
+            overflow: hidden; 
+            aspect-ratio: 2 / 1.15; 
+        }
         .seat-box:active { cursor: grabbing; }
         .seat-box.is-pinned { border: 3px solid var(--pinned-color); box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
-        .seat-box.empty-seat { background: rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.1); box-shadow: none; cursor: grab; }
+        .seat-box.empty-seat { 
+            background: rgba(255,255,255,0.02); 
+            border: 2px dashed rgba(255,255,255,0.1); 
+            box-shadow: none; 
+            cursor: grab; 
+            flex-direction: column; 
+            justify-content: center; 
+            padding: 20px;
+        }
         .empty-seat-text { color: rgba(255,255,255,0.3); font-size: calc(var(--name-font) * 0.7); font-weight: 700; pointer-events: none; text-align: center; line-height: 1.4; }
 
-        .student-img { width: 100%; aspect-ratio: 1 / 1.1; object-fit: cover; object-position: center 8%; border-radius: 12px; background: #2d3748; pointer-events: none; transition: opacity 0.3s; }
-        .student-name { margin-top: 10px; font-weight: 700; font-size: var(--name-font); letter-spacing: 1px; pointer-events: none; transition: all 0.3s; }
+        .student-img { 
+            width: 65%; 
+            height: 150%; 
+            object-fit: cover; 
+            object-position: top center; 
+            background: #2d3748; 
+            pointer-events: none; 
+            align-self: flex-start; 
+        }
+        .student-name { 
+            width: 35%; 
+            text-align: center; 
+            font-weight: 800; 
+            font-size: calc(var(--name-font) * 1.1); 
+            letter-spacing: 1px; 
+            pointer-events: none; 
+            margin: 0; 
+            padding: 5px; 
+            box-sizing: border-box; 
+        }
         
         .seating-grid.hide-photos .student-img { display: none !important; }
-        .seating-grid.hide-photos .student-name { font-size: calc(var(--name-font) * 2.2) !important; margin-top: 0 !important; color: var(--primary); }
-        .seating-grid.hide-photos .seat-box { aspect-ratio: 2/1; }
+        .seating-grid.hide-photos .student-name { width: 100% !important; font-size: calc(var(--name-font) * 2.2) !important; color: var(--primary); }
+        .seating-grid.hide-photos .seat-box { flex-direction: column; justify-content: center; }
 
         .edit-name-input {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -132,11 +195,11 @@
             z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit;
         }
 
-        .pin-btn-container { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 50%; transition: 0.2s; }
+        .pin-btn-container { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 50%; transition: 0.2s; }
         .pin-btn-container:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
         .pin-icon { font-size: var(--pin-icon); color: white; }
 
-        .message-display { width: 100%; text-align: left; margin-top: 20px; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; color: var(--primary); white-space: pre-line; letter-spacing: 1px; line-height: 1.4; box-sizing: border-box; padding: 12px 20px; border: 2px dashed rgba(34, 211, 238, 0.5); border-radius: 12px; background: rgba(34, 211, 238, 0.05); display: none; }
+        .message-display { width: 100%; text-align: left; margin-top: 20px; font-size: 1.1rem; font-weight: 700; flex-shrink: 0; color: #f43f5e; white-space: pre-line; letter-spacing: 1px; line-height: 1.4; box-sizing: border-box; padding: 12px 20px; border: 2px dashed rgba(244, 63, 94, 0.5); border-radius: 12px; background: rgba(244, 63, 94, 0.05); display: none; }
         .school-logo-container { margin-top: auto; padding-top: 15px; width: 100%; display: flex; justify-content: center; align-items: center; flex-shrink: 0; }
         .school-logo { max-width: 250px; height: auto; background-color: #ffffff; padding: 8px 20px; border-radius: 12px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4); opacity: 0.95; }
         .seat-box.hidden-state { opacity: 0; transform: scale(0.4) translateY(60px); filter: blur(8px); }
@@ -148,29 +211,74 @@
         #customToast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); color: var(--primary); padding: 18px 40px; border-radius: 30px; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.6); font-size: 1.2rem; font-weight: 700; opacity: 0; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease; z-index: 9999; pointer-events: none; letter-spacing: 1px; text-align: center; white-space: pre-line; }
         #customToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* ========================================================
-           [긴장감 유발!] 카운트다운 오버레이 UI 
-           ======================================================== */
+        /* 🎬 클래식 영화 필름 감성 카운트다운 오버레이 */
         #countdownOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.85); /* 칠흑같이 어두워지는 효과 */
-            z-index: 9999; display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(8px);
+            background: rgba(22, 28, 36, 0.96); z-index: 9999; display: none; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
         }
-        #countdownText {
-            font-size: 20rem; font-weight: 900; color: var(--primary);
-            text-shadow: 0 0 50px rgba(34, 211, 238, 0.6);
-            opacity: 0; transform: scale(0.5);
+        
+        /* 영화용 필름 원형 링 */
+        .countdown-ring {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            border: 8px solid rgba(34, 211, 238, 0.2);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: inset 0 0 40px rgba(34, 211, 238, 0.1), 0 0 50px rgba(0,0,0,0.5);
         }
-        /* 심장 박동처럼 쿵! 하고 나타났다 사라지는 애니메이션 */
-        @keyframes countAnim {
-            0% { transform: scale(0.3); opacity: 0; }
-            20% { transform: scale(1.1); opacity: 1; }
-            80% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.5); opacity: 0; }
+        .countdown-ring::before {
+            content: '';
+            position: absolute;
+            width: 410px;
+            height: 410px;
+            border: 2px dashed rgba(34, 211, 238, 0.4);
+            border-radius: 50%;
         }
-        /* ======================================================== */
 
+        /* 빈티지 십자선 */
+        .countdown-line-h { position: absolute; width: 550px; height: 2px; background: rgba(34, 211, 238, 0.15); pointer-events: none; }
+        .countdown-line-v { position: absolute; width: 2px; height: 550px; background: rgba(34, 211, 238, 0.15); pointer-events: none; }
+
+        /* 시계방향으로 회전하는 스윕 바늘 */
+        .sweep-hand {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: conic-gradient(rgba(34, 211, 238, 0.25) 0deg, transparent 90deg, transparent 360deg);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: rotate(-90deg);
+        }
+        .sweep-hand.active {
+            animation: sweepTransform 1s linear infinite;
+        }
+        @keyframes sweepTransform {
+            0% { transform: rotate(-90deg); }
+            100% { transform: rotate(270deg); }
+        }
+
+        /* 명품 영화 오프닝 스타일 숫자 */
+        #countdownText {
+            font-size: 14rem; 
+            font-weight: 800; 
+            color: var(--primary);
+            text-shadow: 0 0 40px rgba(34, 211, 238, 0.6);
+            z-index: 10;
+            font-family: 'Courier New', Courier, monospace, sans-serif;
+            opacity: 0; 
+            transform: scale(0.6);
+        }
+        @keyframes countAnim {
+            0% { transform: scale(0.5); opacity: 0; filter: blur(5px); }
+            15% { transform: scale(1.05); opacity: 1; filter: blur(0); }
+            85% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.3); opacity: 0; filter: blur(3px); }
+        }
+
+        /* 🖥️ [꽉찬화면 모드 스타일] 화면 가로 구조 유지 */
         @media screen {
             body.fit-screen .main-content { padding: 0; overflow: hidden; }
             body.fit-screen #captureArea { height: 100vh; padding: 2vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; max-width: none; }
@@ -178,16 +286,23 @@
             body.fit-screen #mainTitle { font-size: 4vh; margin: 0; }
             body.fit-screen .podium { padding: 1vh; font-size: 2.5vh; margin: 1vh auto 2vh auto; width: 300px; }
             body.fit-screen .seating-grid { flex: 1 1 0; min-height: 0; display: grid; gap: 1.5vh; align-content: stretch; grid-auto-rows: minmax(0, 1fr); }
-            body.fit-screen .seat-box { padding: 1vh; height: 100%; min-height: 0; box-sizing: border-box; justify-content: center; }
-            body.fit-screen .student-img { flex: 1 1 0; min-height: 0; width: auto; max-width: 100%; aspect-ratio: 1 / 1.1; object-fit: cover; object-position: center 8%; margin: 0 auto; border-radius: 8px; }
-            body.fit-screen .student-name { flex-shrink: 0; font-size: min(1.3rem, 2.8vh); margin-top: 1vh; }
+            
+            body.fit-screen .seat-box:not(.empty-seat) { 
+                padding: 0; height: 100%; min-height: 0; box-sizing: border-box; 
+                display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: space-between; overflow: hidden;
+                aspect-ratio: auto;
+            }
+            body.fit-screen .student-img { width: 65%; height: 150%; align-self: flex-start; }
+            body.fit-screen .student-name { width: 35%; font-size: min(1.6rem, 3vh); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+            body.fit-screen .seat-box.empty-seat { flex-direction: column; justify-content: center; align-items: center; }
             body.fit-screen .message-display { font-size: min(1.1rem, 2vh); padding: 1vh 2vw; margin-top: 1vh; }
         }
 
+        /* 🖨️ [인쇄 및 이미지 저장 전용 CSS] 최초의 완벽했던 원본 상태로 강제 복구 */
         @media print {
             html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: hidden !important; }
             .sidebar, #modal, .pin-btn-container, #emptyState, .credit-btn, #customToast, #countdownOverlay { display: none !important; }
-            .main-content { padding: 0 !important; display: flex !important; width: 100% !important; height: 100% !important; }
+            .main-content { padding: 0 !important; display: flex !important; width: 100% !important; height: 100% !important; overflow: hidden !important; }
             #captureArea { width: 100% !important; height: 100% !important; max-width: none !important; padding: 4mm !important; background: white !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; }
             .header-group { flex-shrink: 0 !important; margin-bottom: 1mm !important; }
             #mainTitle { font-size: 24pt !important; color: black !important; margin-bottom: 1mm !important; letter-spacing: 1px !important; }
@@ -196,13 +311,68 @@
             .message-display { flex-shrink: 0 !important; margin: 2mm 0 !important; font-size: 12pt !important; color: black !important; font-weight: 800 !important; text-align: left !important; padding: 2mm 4mm !important; border: 1.5px solid black !important; border-radius: 8px !important; background: white !important; }
             .school-logo-container { flex-shrink: 0 !important; margin-top: auto !important; padding: 2mm 0 !important; display: flex !important; }
             .school-logo { max-width: 200px !important; opacity: 1 !important; border-radius: 0 !important; padding: 0 !important; box-shadow: none !important; }
-            .seating-grid { flex: 1 1 0 !important; min-height: 0 !important; display: grid !important; gap: var(--print-gap) !important; align-content: stretch !important; grid-auto-rows: minmax(0, 1fr) !important; }
-            .seat-box { border: 1.5px solid black !important; background: white !important; box-shadow: none !important; padding: var(--print-box-padding) !important; border-radius: 8px !important; page-break-inside: avoid; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; height: 100% !important; box-sizing: border-box !important; min-height: 0 !important; overflow: hidden !important; }
+            
+            .seating-grid { 
+                flex: 1 1 0 !important; 
+                min-height: 0 !important; 
+                display: grid !important; 
+                grid-template-columns: repeat(var(--grid-cols), 1fr) !important;
+                gap: var(--print-gap) !important; 
+                align-content: stretch !important; 
+                grid-auto-rows: minmax(0, 1fr) !important; 
+            }
+            
+            .seat-box { 
+                background: white !important; 
+                border: 1.5px solid black !important; 
+                border-radius: 8px !important; 
+                box-shadow: none !important; 
+                padding: var(--print-box-padding) !important; 
+                display: flex !important; 
+                flex-direction: column !important; 
+                align-items: center !important; 
+                justify-content: center !important; 
+                height: 100% !important; 
+                box-sizing: border-box !important; 
+                min-height: 0 !important; 
+                overflow: hidden !important; 
+                aspect-ratio: auto !important; 
+                page-break-inside: avoid !important;
+            }
             .seat-box.empty-seat { border: 1.5px dashed #ccc !important; }
             .empty-seat-text { display: none !important; }
-            .student-img { flex: 1 1 0 !important; min-height: 0 !important; width: 100% !important; height: 100% !important; object-fit: cover !important; object-position: center 8% !important; background: transparent !important; border-radius: 6px !important; }
-            .student-name { flex-shrink: 0 !important; font-size: var(--print-name-font) !important; color: black !important; margin-top: 1mm !important; line-height: 1.2 !important; }
-            .seating-grid.hide-photos .student-name { font-size: calc(var(--print-name-font) * 1.8) !important; margin-top: 0 !important; }
+            
+            .student-img { 
+                display: block !important;
+                width: 100% !important; 
+                height: auto !important; 
+                max-height: 82% !important; 
+                flex: 1 1 auto !important;
+                min-height: 0 !important;
+                aspect-ratio: 1 / 1.15 !important; 
+                object-fit: cover !important; 
+                object-position: center 8% !important; 
+                background: transparent !important; 
+                border-radius: 6px !important; 
+                transform: none !important; 
+                margin: 0 0 1mm 0 !important;
+            }
+            
+            .student-name { 
+                display: block !important;
+                width: 100% !important; 
+                height: auto !important;
+                flex-shrink: 0 !important; 
+                font-size: var(--print-name-font) !important; 
+                color: black !important; 
+                line-height: 1.2 !important; 
+                text-align: center !important; 
+                font-weight: 800 !important; 
+                writing-mode: horizontal-tb !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            .seating-grid.hide-photos .student-name { font-size: calc(var(--print-name-font) * 1.8) !important; max-height: none !important; }
         }
     </style>
     <style id="dynamicPrintStyle"> @media print { @page { size: A4 portrait; margin: 5mm; } } </style>
@@ -210,79 +380,83 @@
 <body id="bodyTag" class="intro-mode">
 
     <aside class="sidebar">
-        <section>
-            <h2>학급 정보 입력</h2>
-            <input type="text" id="classInfoInput" class="custom-input" placeholder="예) 의료전기전자과 2학년 2반" autocomplete="off">
-        </section>
-
-        <section>
-            <h2>좌석 레이아웃 <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal; margin-left: 6px;">(미입력 시 자동 최적화)</span></h2>
-            <div class="layout-controls">
-                <input type="number" id="colInput" class="custom-input" min="2" max="10" placeholder="가로칸" title="가로 줄 수">
-                <input type="number" id="rowInput" class="custom-input" min="2" max="10" placeholder="세로칸" title="세로 줄 수">
-            </div>
-            <button class="btn btn-sub" style="width:100%; padding: 10px;" onclick="applyLayoutSettings()">격자 적용 / 초기화</button>
-        </section>
-
-        <section class="highlight-section" style="border-color: rgba(16, 185, 129, 0.3);">
-            <h2 style="margin-top: 0; color: #10b981; font-size: 1.2rem;">[STEP 1] 명단 준비 (택 1)</h2>
+        <section class="highlight-section step1">
+            <h2 style="margin-top: 0; color: #8b5cf6; font-size: 1.15rem; border-left: 4px solid #8b5cf6; padding-left: 10px;">[STEP 1] 기본 설정</h2>
             
-            <div class="upload-section" onclick="document.getElementById('photoInput').click()">
-                <p id="uploadText">📁 1. 학생 사진 폴더 선택</p>
-                <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 0.95rem; font-weight: bold; margin-bottom: 8px; color: var(--text-main);">학급 정보 입력 <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal; margin-left: 6px;">(선택)</span></div>
+                <input type="text" id="classInfoInput" class="custom-input" placeholder="예) 의료전기전자과 2학년 2반" autocomplete="off">
             </div>
-            
-            <button class="btn-manual-grid" onclick="generateEmptyGrid()">📝 2. 사진 없이 직접 좌석표 만들기</button>
-        </section>
 
-        <section class="highlight-section">
-            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.2rem;">[STEP 2] 배치 실행</h2>
-            <div class="btn-group">
-                <button class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">🎲 무작위 배치 시작</button>
-                <button class="btn btn-sub" style="font-size: 0.95rem; padding: 12px; margin-top: 5px;" onclick="resetPins()">모든 고정 해제</button>
-                <button id="fitScreenBtn" class="btn btn-sub" style="width: 100%; margin-top: 5px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 교실보기 (한 화면에 맞춤) : OFF</button>
-            </div>
-        </section>
-
-        <section>
-            <h2>출력용 하단 메시지</h2>
-            <textarea id="messageInput" class="custom-message-input" placeholder="출력물 하단 당부 말씀&#10;예) 허락 없는 자리 이동 금지"></textarea>
-        </section>
-
-        <section>
-            <h2>화면 및 출력 설정</h2>
-            <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
-                <input type="checkbox" id="hidePhotoCheck" style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
-                <span style="font-size: 1.05rem;">사진 숨기기 (이름만 크게 / <span style="color:var(--primary); font-weight:bold;">가로 인쇄</span>)</span>
-            </label>
-            <div class="btn-group">
-                <button class="btn btn-sub" onclick="openModal('student')">학생용 시점 출력</button>
-                <button class="btn btn-sub" onclick="openModal('teacher')">교사용 시점 출력</button>
-            </div>
-        </section>
-
-        <section>
-            <h2>현재 배치 저장 & 불러오기</h2>
-            <div class="btn-group">
-                <div class="btn-row">
-                    <button class="btn btn-sub" style="border: 1px solid var(--primary); color: var(--primary);" onclick="downloadBackupFile()">⬇️ 백업 다운로드</button>
-                    <button class="btn btn-sub" style="border: 1px solid #f43f5e; color: #f43f5e;" onclick="document.getElementById('backupInput').click()">⬆️ 백업 불러오기</button>
-                    <input type="file" id="backupInput" accept=".json" style="display:none">
+            <div>
+                <div style="font-size: 0.95rem; font-weight: bold; margin-bottom: 8px; color: var(--text-main);">좌석 레이아웃 <span style="font-size: 0.75rem; color: var(--text-dim); font-weight: normal; margin-left: 6px;">(미입력 시 자동 최적화)</span></div>
+                <div class="layout-controls">
+                    <input type="number" id="colInput" class="custom-input" min="2" max="10" placeholder="가로칸" title="가로 줄 수">
+                    <input type="number" id="rowInput" class="custom-input" min="2" max="10" placeholder="세로칸" title="세로 줄 수">
                 </div>
+                <button type="button" class="btn btn-sub" style="width:100%; padding: 10px; margin-top: 5px;" onclick="applyLayoutSettings()">격자 적용 / 초기화</button>
+            </div>
+        </section>
+
+        <section class="highlight-section step2">
+            <h2 style="margin-top: 0; color: #10b981; font-size: 1.15rem; border-left: 4px solid #10b981; padding-left: 10px;">[STEP 2] 명단 준비 (택 1)</h2>
+            
+            <div class="choice-group">
+                <div class="step2-choice-btn" onclick="document.getElementById('photoInput').click()">
+                    <span id="uploadText">1. 학생 사진 폴더 선택</span>
+                </div>
+                <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
+                
+                <div class="step2-choice-btn" onclick="generateEmptyGrid()">
+                    <span>2. 사진 없이 빈 좌석표 만들기</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="highlight-section step3">
+            <h2 style="margin-top: 0; color: var(--primary); font-size: 1.15rem; border-left: 4px solid var(--primary); padding-left: 10px;">[STEP 3] 배치 실행</h2>
+            <button type="button" class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">🎲 무작위 배치 시작</button>
+            <div class="btn-row" style="margin-top: 10px;">
+                <button type="button" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px;" onclick="resetPins()">모든 고정 해제</button>
+                <button type="button" id="fitScreenBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 꽉찬화면(OFF)</button>
+            </div>
+        </section>
+
+        <section class="highlight-section step4">
+            <h2 style="margin-top: 0; color: #f43f5e; font-size: 1.15rem; border-left: 4px solid #f43f5e; padding-left: 10px;">[STEP 4] 인쇄 / 저장</h2>
+            
+            <textarea id="messageInput" class="custom-message-input" placeholder="출력물 하단 당부 말씀&#10;예) 허락 없는 자리 이동 금지"></textarea>
+            
+            <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
+                <input type="checkbox" id="hidePhotoCheck" style="width: 20px; height: 20px; accent-color: #f43f5e; cursor: pointer;">
+                <span style="font-size: 0.95rem;">사진 숨기기 (<span style="color:#f43f5e; font-weight:bold;">가로 인쇄</span> 모드 전환)</span>
+            </label>
+            
+            <div class="btn-row" style="margin-top: 15px;">
+                <button type="button" class="btn-step4" onclick="openModal('student')">🖨️ 학생용 출력</button>
+                <button type="button" class="btn-step4" style="background: linear-gradient(135deg, #be123c, #9f1239);" onclick="openModal('teacher')">🖨️ 교사용 출력</button>
+            </div>
+        </section>
+
+        <section style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+            <h2 style="font-size: 0.95rem; color: #cbd5e1; margin-top: 0; border: none; padding: 0; margin-bottom: 10px;">좌석 데이터 관리 (백업/복구)</h2>
+            <div class="btn-row">
+                <button type="button" class="btn btn-sub" style="border: 1px solid #10b981; color: #10b981; font-size: 0.9rem;" onclick="document.getElementById('backupInput').click()">불러오기</button>
+                <button type="button" class="btn btn-sub" style="border: 1px solid var(--primary); color: var(--primary); font-size: 0.9rem;" onclick="downloadBackupFile()">현재 저장</button>
+                <input type="file" id="backupInput" accept=".json" style="display:none">
             </div>
         </section>
 
         <div class="usage-tips">
             <h3>사용 안내 및 팁</h3>
-            <p style="margin:0; line-height:1.6; word-break:keep-all;">
-                💡 <strong>[이름 직접 입력]</strong> 좌석을 <strong>더블클릭</strong>하면 언제든지 이름을 직접 입력하거나 수정할 수 있습니다.<br><br>
-                📂 파일명은 '이름.jpg' 또는 '번호.이름.jpg' 모두 가능합니다.<br><br>
-                💾 <strong>[백업 다운로드]</strong>를 누르면 학급 이름으로 파일이 생성되어 USB에 저장해 두시면 언제든 다시 불러올 수 있습니다!
+            <p style="margin:0; line-height:1.7; word-break:keep-all;">
+                💡 <strong>[이름 입력 및 이동]</strong> 좌석을 <strong>더블클릭</strong>하면 이름을 직접 수정할 수 있고, <strong>드래그</strong>하여 서로의 자리를 바꿀 수 있습니다.<br><br>
+                📂 <strong>[사진 파일명]</strong>은 '이름.jpg' 또는 '번호.이름.jpg' 모두 가능합니다.<br><br>
+                🎁 <strong>[안내]</strong> 본 시스템에는 사용의 재미를 더하기 위한 작은 <strong>이스터에그(Easter Egg)</strong>가 숨겨져 있습니다. 어떤 기능인지 궁금하시거나 힌트가 필요하신 분은 <strong>개발자(KimJongho)에게 문의</strong>해 주세요! ✨
             </p>
         </div>
         
-        <button class="credit-btn" onclick="saveSecretPlan()">© Made by KimJongho</button>
-
+        <button type="button" class="credit-btn" onclick="saveSecretPlan()">© Made by KimJongho</button>
     </aside>
 
     <main class="main-content">
@@ -295,10 +469,10 @@
             <div id="emptyState" onclick="startApp()">
                 <img src="캐릭터기본형.png" alt="캐릭터" class="welcome-character">
                 <div id="introText" class="welcome-text">
-                    <span style="font-size: 1.4rem; color: #10b981;">👇 좌석 배치를 시작하려면 위 이미지를 클릭하세요! 👇</span>
+                    <span style="font-size: 1.4rem; color: #10b981;">👇 좌석 배치를 시작하려면 화면을 클릭하세요! 👇</span>
                 </div>
                 <div id="mainText" class="welcome-text" style="display: none;">
-                    우측 메뉴의 <span style="color:#10b981;">[STEP 1]</span> 영역에서<br>사진을 넣거나 빈 좌석표를 만들어 주세요!
+                    우측 메뉴의 <span style="color:#10b981;">[STEP 2]</span> 영역에서<br>사진을 넣거나 빈 좌석표를 만들어 주세요!
                 </div>
             </div>
             
@@ -314,15 +488,20 @@
         <div class="modal-body">
             <h3 style="margin-top:0; color:var(--primary); margin-bottom:25px;">출력 방식 선택</h3>
             <div class="btn-group">
-                <button class="btn btn-main" onclick="runAction('print')">A4 인쇄 바로가기</button>
-                <button class="btn btn-sub" onclick="runAction('download')">이미지(PNG) 저장</button>
-                <button class="btn btn-sub" style="background:transparent; border:1px solid #475569;" onclick="closeModal()">취소</button>
+                <button type="button" class="btn btn-main" onclick="runAction('print')">A4 종이로 인쇄하기</button>
+                <button type="button" class="btn btn-sub" onclick="runAction('download')">이미지(PNG) 파일 저장</button>
+                <button type="button" class="btn btn-sub" style="background:transparent; border:1px solid #475569;" onclick="closeModal()">취소</button>
             </div>
         </div>
     </div>
 
     <div id="countdownOverlay">
-        <div id="countdownText">3</div>
+        <div class="countdown-ring">
+            <div class="countdown-line-h"></div>
+            <div class="countdown-line-v"></div>
+            <div id="sweepHand" class="sweep-hand"></div>
+            <div id="countdownText">3</div>
+        </div>
     </div>
 
     <div id="customToast"></div>
@@ -366,7 +545,7 @@
         let students = []; let seats = []; let draggedIndex = null;
         let currentCols = 4; let currentRows = 4;
         let isFitScreen = false;
-        let isShuffling = false; // 카운트다운 중 중복 클릭 방지
+        let isShuffling = false; 
 
         const defaultAvatar = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjY2Ij48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjI2NiIgZmlsbD0iIzJkMzc0OCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjExMCIgcj0iNDUiIGZpbGw9IiM0YTU1NjgiLz48cGF0aCBkPSJNMzAgMjY2YzAtNDAgMzAtNzAgNzAtNzBoMGM0MCAwIDcwIDMwIDcwIDcwWiIgZmlsbD0iIzRhNTU2OCIvPjwvc3ZnPg==';
 
@@ -432,7 +611,9 @@
             document.getElementById('rowInput').value = currentRows;
             
             applyGridStyle(); rebuildSeatsArray(); renderGrid(false);
-            document.getElementById('uploadText').innerText = `✅ ${students.length}명 사진 완료`;
+            
+            document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택 (완료: ${students.length}명)`;
+            e.target.value = '';
         });
 
         function generateEmptyGrid() {
@@ -451,9 +632,9 @@
         function syncStudentsArray() {
             students = seats.filter(s => s.type === 'student').map(s => ({ name: s.name, imgSrc: s.imgSrc, isPinned: s.isPinned }));
             if(students.length > 0) {
-                document.getElementById('uploadText').innerText = `✅ ${students.length}명 등록됨`;
+                document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택 (완료: ${students.length}명)`;
             } else {
-                document.getElementById('uploadText').innerText = `📁 1. 학생 사진 폴더 선택`;
+                document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택`;
             }
         }
 
@@ -556,39 +737,31 @@
         function togglePin(e, idx) { e.stopPropagation(); if (seats[idx].type === 'student') { seats[idx].isPinned = !seats[idx].isPinned; renderGrid(false); } }
         function resetPins() { seats.forEach(s => {if(s.type==='student') s.isPinned = false;}); renderGrid(false); }
         
-
-        // ========================================================
-        // [위장 이스터에그 + 카운트다운 로직]
-        // ========================================================
         function saveSecretPlan() {
             if (seats.length === 0) return;
-            
             const secretPlanNames = seats.map(s => s.type === 'student' ? s.name : "X");
             localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
-            
-            // 완벽한 위장을 위한 훈훈한 평범 메시지
             showCustomToast("스마트 좌석 배치 시스템 v2.0\n선생님, 오늘 하루도 응원합니다! ✨");
         }
 
         function triggerAnimation(element) {
-            // CSS 애니메이션을 강제로 재시작하는 트릭
             element.style.animation = 'none';
-            element.offsetHeight; /* trigger reflow */
-            element.style.animation = 'countAnim 1s ease-in-out forwards';
+            element.offsetHeight; 
+            element.style.animation = 'countAnim 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards';
         }
 
-        // [핵심] 배치 시작을 누르면 무조건 이 함수가 먼저 실행됩니다.
         function startCountdownAndShuffle(event) {
             if (students.length === 0 || isShuffling) return;
             isShuffling = true;
             
-            // Ctrl 키를 눌렀는지 여부를 카운트다운 시작 전에 미리 기억해둡니다.
             const isCtrlPressed = event && event.ctrlKey;
-            
             const overlay = document.getElementById('countdownOverlay');
             const countText = document.getElementById('countdownText');
+            const sweepHand = document.getElementById('sweepHand');
             
             overlay.style.display = 'flex';
+            sweepHand.classList.add('active');
+            
             let count = 3;
             countText.innerText = count;
             triggerAnimation(countText);
@@ -600,18 +773,15 @@
                     triggerAnimation(countText);
                 } else {
                     clearInterval(countdownInterval);
+                    sweepHand.classList.remove('active');
                     overlay.style.display = 'none';
-                    
-                    // 카운트다운이 끝나면 실제 셔플(혹은 비밀 배치) 실행!
                     executeActualShuffle(isCtrlPressed);
                     isShuffling = false;
                 }
             }, 1000);
         }
 
-        // 실제 셔플을 처리하는 함수 (기존 shuffleSeats 역할)
         function executeActualShuffle(isCtrlPressed) {
-            // 이스터에그 발동 (Ctrl 키를 누른 상태였던 경우)
             if (isCtrlPressed) {
                 const savedPlan = localStorage.getItem('secretSeatingPlan');
                 if (savedPlan) {
@@ -625,8 +795,7 @@
                         
                         if (newSeats.length === seats.length) {
                             seats = newSeats;
-                            renderGrid(true); // 애니메이션 켜서 무작위인 척
-                            // 알림 메시지 일절 없음! 완벽 범죄 성립!
+                            renderGrid(true); 
                             return; 
                         }
                     } catch(e) {
@@ -635,7 +804,6 @@
                 }
             }
 
-            // 진짜 무작위 셔플
             const freeIdx = []; const freeStuds = [];
             seats.forEach((s, i) => { if (s.type === 'student' && !s.isPinned) { freeIdx.push(i); freeStuds.push(s); } });
             
@@ -647,8 +815,6 @@
             freeIdx.forEach((idx, i) => seats[idx] = freeStuds[i]);
             renderGrid(true);
         }
-        // ========================================================
-
 
         function showCustomToast(msg) {
             const toast = document.getElementById('customToast');
@@ -675,7 +841,7 @@
             downloadAnchorNode.click();
             downloadAnchorNode.remove();
             
-            showCustomToast(`✅ [${fileName}] 파일이 다운로드되었습니다.\nUSB에 저장해 두시면 다른 컴퓨터에서도 불러올 수 있습니다.`);
+            showCustomToast(`✅ [${fileName}] 파일이 저장되었습니다.\n나중에 '불러오기'로 그대로 복구할 수 있습니다.`);
         }
 
         document.getElementById('backupInput').addEventListener('change', function(e) {
@@ -719,12 +885,12 @@
             const btn = document.getElementById('fitScreenBtn');
             if (isFitScreen) {
                 body.classList.add('fit-screen');
-                btn.innerHTML = '🖥️ 교실보기 (한 화면에 맞춤) : ON';
+                btn.innerHTML = '🖥️ 꽉찬화면(ON)';
                 btn.style.background = 'var(--primary)';
                 btn.style.color = '#0f172a';
             } else {
                 body.classList.remove('fit-screen');
-                btn.innerHTML = '🖥️ 교실보기 (한 화면에 맞춤) : OFF';
+                btn.innerHTML = '🖥️ 꽉찬화면(OFF)';
                 btn.style.background = 'transparent';
                 btn.style.color = 'var(--primary)';
             }
