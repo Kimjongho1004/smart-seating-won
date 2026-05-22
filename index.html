@@ -9,7 +9,8 @@
         :root {
             --primary: #22d3ee;
             --bg-dark: #0f172a;
-            --card-bg: #1e293b;
+            --card-bg: #27364b; 
+            --section-bg: #334863; 
             --pinned-color: #f43f5e;
             --text-main: #f1f5f9;
             --text-dim: #94a3b8;
@@ -26,6 +27,7 @@
             --pin-icon: 20px;
         }
 
+        /* 💡 드래그 방지가 전체 적용되어 있지만 모달창은 예외처리 예정 */
         body { 
             font-family: 'Pretendard', 'Malgun Gothic', sans-serif; 
             margin: 0; display: flex; flex-direction: row-reverse; 
@@ -37,7 +39,7 @@
         .sidebar { 
             width: var(--sidebar-width); background: var(--card-bg); 
             padding: 25px; border-left: 1px solid rgba(255,255,255,0.05); 
-            display: flex; flex-direction: column; gap: 20px; 
+            display: flex; flex-direction: column; gap: 15px; 
             overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 100; flex-shrink: 0;
             box-sizing: border-box; 
             transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), margin-right 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
@@ -45,8 +47,8 @@
 
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-track { background: transparent; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
         body.intro-mode .sidebar {
             margin-right: calc(-1 * var(--sidebar-width));
@@ -62,7 +64,7 @@
             100% { filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3)); } 
         }
         
-        .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 15px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: border-color 0.3s; margin-bottom: 5px; }
+        .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 12px 15px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: border-color 0.3s; margin-bottom: 5px; }
         .custom-input:focus { outline: none; border-color: var(--primary); }
 
         .layout-controls { display: flex; gap: 10px; }
@@ -71,37 +73,28 @@
         .btn-group { display: flex; flex-direction: column; gap: 10px; }
         .btn-row { display: flex; gap: 10px; width: 100%; }
         .btn-row .btn { flex: 1; padding: 12px 5px; font-size: 0.95rem; }
-        .btn { padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1.05rem; }
+        .btn { padding: 15px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
         .btn-main { background: var(--primary); color: #0f172a; box-shadow: 0 4px 6px rgba(34, 211, 238, 0.2); }
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(34, 211, 238, 0.3); }
-        .btn-sub { background: #334155; color: white; }
-        .btn-sub:hover { background: #475569; }
+        .btn-sub { background: #475569; color: white; }
+        .btn-sub:hover { background: #64748b; }
+        .btn-accent { background: var(--primary); color: var(--bg-dark); }
+        .btn-accent:hover { background: #a5f3fc; }
 
-        .highlight-section { padding: 22px; border-radius: 16px; margin: 5px 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); border: 1px solid; }
-        .step1 { background: rgba(139, 92, 246, 0.03); border-color: rgba(139, 92, 246, 0.25); }
-        .step2 { background: rgba(16, 185, 129, 0.03); border-color: rgba(16, 185, 129, 0.25); }
-        .step3 { background: rgba(34, 211, 238, 0.03); border-color: rgba(34, 211, 238, 0.25); }
-        .step4 { background: rgba(244, 63, 94, 0.03); border-color: rgba(244, 63, 94, 0.25); }
+        .highlight-section { padding: 22px; border-radius: 16px; margin: 4px 0; background: linear-gradient(145deg, var(--section-bg), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .step0 { background: linear-gradient(145deg, var(--section-bg), rgba(245, 158, 11, 0.12)); border-color: rgba(245, 158, 11, 0.35); }
+        .step1 { background: linear-gradient(145deg, var(--section-bg), rgba(139, 92, 246, 0.12)); border-color: rgba(139, 92, 246, 0.35); }
+        .step2 { background: linear-gradient(145deg, var(--section-bg), rgba(16, 185, 129, 0.12)); border-color: rgba(16, 185, 129, 0.35); }
+        .step3 { background: linear-gradient(145deg, var(--section-bg), rgba(34, 211, 238, 0.12)); border-color: rgba(34, 211, 238, 0.35); }
+        .step4 { background: linear-gradient(145deg, var(--section-bg), rgba(244, 63, 94, 0.12)); border-color: rgba(244, 63, 94, 0.35); }
+
+        .h-title { font-size: 1.05rem; font-weight: 700; color: #fcd34d; margin-top: 0; margin-bottom: 12px; display: flex; align-items: center; }
 
         .choice-group { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
         .step2-choice-btn {
-            background: rgba(16, 185, 129, 0.06); 
-            border: 2px solid rgba(16, 185, 129, 0.3);
-            border-radius: 12px;
-            padding: 18px 25px; 
-            color: var(--text-main);
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-            box-sizing: border-box;
-            letter-spacing: 0.5px;
+            background: rgba(16, 185, 129, 0.08); border: 2px solid rgba(16, 185, 129, 0.3); border-radius: 12px; padding: 18px 25px; color: var(--text-main); font-size: 1.05rem; font-weight: 700; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; justify-content: flex-start; width: 100%; box-sizing: border-box; letter-spacing: 0.5px;
         }
-        .step2-choice-btn:hover { background: rgba(16, 185, 129, 0.15); border-color: #10b981; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25); }
+        .step2-choice-btn:hover { background: rgba(16, 185, 129, 0.2); border-color: #10b981; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.25); }
         .step2-choice-btn:active { transform: translateY(1px); }
         
         .btn-shuffle { background: linear-gradient(135deg, var(--primary), #0ea5e9); color: #0f172a; font-size: 1.15rem; font-weight: 800; padding: 18px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(34, 211, 238, 0.3); animation: pulse-glow 2s infinite; width: 100%;}
@@ -110,15 +103,29 @@
         .btn-step4 { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; font-size: 1.05rem; font-weight: 800; padding: 15px; border: none; border-radius: 12px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center; flex: 1;}
         .btn-step4:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 8px 25px rgba(244, 63, 94, 0.4); }
 
-        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
+        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
         .custom-message-input:focus { outline: none; border-color: #f43f5e; }
         
-        .usage-tips { margin-top: auto; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.7; border: 1px solid rgba(255,255,255,0.05); }
-        .usage-tips h3 { color: var(--primary); font-size: 0.95rem; margin: 0 0 10px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; font-weight: 700; }
-        .usage-tips p { margin: 0; word-break: keep-all; }
+        .usage-tips { margin-top: auto; padding: 18px 15px; background: rgba(0,0,0,0.15); border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; border: 1px solid rgba(255,255,255,0.08); }
+        .usage-tips h3 { color: var(--primary); font-size: 0.95rem; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; font-weight: 700; }
+        .usage-tips ul { list-style: none; padding: 0; margin: 0; word-break: keep-all; }
+        .usage-tips li { margin-bottom: 10px; padding-left: 16px; position: relative; }
+        .usage-tips li:last-child { margin-bottom: 0; }
+        .usage-tips li::before { content: "▪"; position: absolute; left: 0; top: 1px; color: var(--primary); font-size: 0.8rem; }
+        .usage-tips li strong { color: #f1f5f9; font-weight: 700; }
         
         .credit-btn { background: transparent; border: none; color: rgba(255, 255, 255, 0.3); font-size: 0.85rem; text-align: left; width: 100%; padding: 5px 10px; margin-top: 5px; cursor: pointer; transition: color 0.3s; font-family: inherit; letter-spacing: 1px; box-sizing: border-box; font-weight: 500; }
         .credit-btn:hover { color: var(--primary); }
+
+        /* 💡 가이드 모달 스타일 (드래그 가능하도록 user-select: text 추가) */
+        #guideModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 16px; width: 90%; max-width: 650px; max-height: 85vh; overflow-y: auto; border: 1px solid var(--primary); box-shadow: 0 15px 40px rgba(0,0,0,0.6); -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; }
+        
+        .code-container { position: relative; margin-top: 10px; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; padding: 6px 12px; font-size: 0.8rem; background: #475569; color: white; border: none; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .copy-btn:hover { background: var(--primary); color: var(--bg-dark); }
+        
+        .modal-content pre { background: #0f172a; padding: 20px 15px; border-radius: 8px; font-size: 0.85rem; overflow-x: auto; color: #10b981; border: 1px solid rgba(255,255,255,0.1); line-height: 1.4; -webkit-user-select: text; -moz-user-select: text; -ms-user-select: text; user-select: text; }
 
         .main-content { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
         #captureArea { width: 100%; max-width: 1200px; padding: 30px 30px 40px 30px; display: flex; flex-direction: column; align-items: center; background: var(--bg-dark); min-height: 100%; box-sizing: border-box; position: relative; }
@@ -134,7 +141,6 @@
         
         .seating-grid { display: grid; grid-template-columns: repeat(var(--grid-cols), 1fr); gap: var(--gap-size); width: 100%; flex-grow: 1; align-content: start; }
         
-        /* 🖥️ [일반 모니터 화면] 가로형 배치 + 하단 1/3 커팅 (선생님 대만족 스타일 고정) */
         .seat-box { 
             position: relative; 
             background: var(--card-bg); 
@@ -163,39 +169,23 @@
         }
         .empty-seat-text { color: rgba(255,255,255,0.3); font-size: calc(var(--name-font) * 0.7); font-weight: 700; pointer-events: none; text-align: center; line-height: 1.4; }
 
-        .student-img { 
-            width: 65%; 
-            height: 150%; 
-            object-fit: cover; 
-            object-position: top center; 
-            background: #2d3748; 
-            pointer-events: none; 
-            align-self: flex-start; 
-        }
+        .student-img { width: 65%; height: 150%; object-fit: cover; object-position: top center; background: #2d3748; pointer-events: none; align-self: flex-start; }
+        
         .student-name { 
-            width: 35%; 
-            text-align: center; 
-            font-weight: 800; 
-            font-size: calc(var(--name-font) * 1.1); 
-            letter-spacing: 1px; 
-            pointer-events: none; 
-            margin: 0; 
-            padding: 5px; 
-            box-sizing: border-box; 
+            width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: min(var(--name-font), 1.8vw); line-height: 1.15; letter-spacing: 0.5px; pointer-events: none; margin: 0; padding: 4px; box-sizing: border-box; height: 100%; word-break: break-word; overflow: hidden;
         }
+        .seat-number { font-size: 0.85em; opacity: 0.85; margin-bottom: 2px; }
+        .seat-name { font-size: 1em; }
         
         .seating-grid.hide-photos .student-img { display: none !important; }
         .seating-grid.hide-photos .student-name { width: 100% !important; font-size: calc(var(--name-font) * 2.2) !important; color: var(--primary); }
         .seating-grid.hide-photos .seat-box { flex-direction: column; justify-content: center; }
 
         .edit-name-input {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 85%; padding: 12px 5px; font-size: 1.2rem; font-weight: 700; text-align: center;
-            border: 3px solid var(--primary); border-radius: 8px; background: var(--bg-dark); color: white;
-            z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; padding: 12px 5px; font-size: 1.2rem; font-weight: 700; text-align: center; border: 3px solid var(--primary); border-radius: 8px; background: var(--bg-dark); color: white; z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit;
         }
 
-        .pin-btn-container { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 50%; transition: 0.2s; }
+        .pin-btn-container { position: absolute; top: 10px; right: 10px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); border-radius: 50%; transition: 0.2s; }
         .pin-btn-container:hover { background: rgba(0,0,0,0.9); transform: scale(1.1); }
         .pin-icon { font-size: var(--pin-icon); color: white; }
 
@@ -208,77 +198,20 @@
         .modal-body { background: var(--card-bg); padding: 40px; border-radius: 16px; width: 360px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
         .modal-body h3 { font-size: 1.4rem; }
         
-        #customToast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); color: var(--primary); padding: 18px 40px; border-radius: 30px; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.6); font-size: 1.2rem; font-weight: 700; opacity: 0; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease; z-index: 9999; pointer-events: none; letter-spacing: 1px; text-align: center; white-space: pre-line; }
+        #customToast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card-bg); color: var(--primary); padding: 18px 40px; border-radius: 30px; border: 1px solid rgba(34, 211, 238, 0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.6); font-size: 1.2rem; font-weight: 700; opacity: 0; transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s ease; z-index: 9999; pointer-events: none; letter-spacing: 1px; text-align: center; white-space: pre-line; z-index: 3000; }
         #customToast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-        /* 🎬 클래식 영화 필름 감성 카운트다운 오버레이 */
-        #countdownOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(22, 28, 36, 0.96); z-index: 9999; display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(4px);
-        }
-        
-        /* 영화용 필름 원형 링 */
-        .countdown-ring {
-            position: relative;
-            width: 450px;
-            height: 450px;
-            border: 8px solid rgba(34, 211, 238, 0.2);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: inset 0 0 40px rgba(34, 211, 238, 0.1), 0 0 50px rgba(0,0,0,0.5);
-        }
-        .countdown-ring::before {
-            content: '';
-            position: absolute;
-            width: 410px;
-            height: 410px;
-            border: 2px dashed rgba(34, 211, 238, 0.4);
-            border-radius: 50%;
-        }
-
-        /* 빈티지 십자선 */
+        #countdownOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(22, 28, 36, 0.96); z-index: 9999; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .countdown-ring { position: relative; width: 450px; height: 450px; border: 8px solid rgba(34, 211, 238, 0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: inset 0 0 40px rgba(34, 211, 238, 0.1), 0 0 50px rgba(0,0,0,0.5); }
+        .countdown-ring::before { content: ''; position: absolute; width: 410px; height: 410px; border: 2px dashed rgba(34, 211, 238, 0.4); border-radius: 50%; }
         .countdown-line-h { position: absolute; width: 550px; height: 2px; background: rgba(34, 211, 238, 0.15); pointer-events: none; }
         .countdown-line-v { position: absolute; width: 2px; height: 550px; background: rgba(34, 211, 238, 0.15); pointer-events: none; }
+        .sweep-hand { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: conic-gradient(rgba(34, 211, 238, 0.25) 0deg, transparent 90deg, transparent 360deg); border-radius: 50%; pointer-events: none; transform: rotate(-90deg); }
+        .sweep-hand.active { animation: sweepTransform 1s linear infinite; }
+        @keyframes sweepTransform { 0% { transform: rotate(-90deg); } 100% { transform: rotate(270deg); } }
+        #countdownText { font-size: 14rem; font-weight: 800; color: var(--primary); text-shadow: 0 0 40px rgba(34, 211, 238, 0.6); z-index: 10; font-family: 'Courier New', Courier, monospace, sans-serif; opacity: 0; transform: scale(0.6); }
+        @keyframes countAnim { 0% { transform: scale(0.5); opacity: 0; filter: blur(5px); } 15% { transform: scale(1.05); opacity: 1; filter: blur(0); } 85% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.3); opacity: 0; filter: blur(3px); } }
 
-        /* 시계방향으로 회전하는 스윕 바늘 */
-        .sweep-hand {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: conic-gradient(rgba(34, 211, 238, 0.25) 0deg, transparent 90deg, transparent 360deg);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: rotate(-90deg);
-        }
-        .sweep-hand.active {
-            animation: sweepTransform 1s linear infinite;
-        }
-        @keyframes sweepTransform {
-            0% { transform: rotate(-90deg); }
-            100% { transform: rotate(270deg); }
-        }
-
-        /* 명품 영화 오프닝 스타일 숫자 */
-        #countdownText {
-            font-size: 14rem; 
-            font-weight: 800; 
-            color: var(--primary);
-            text-shadow: 0 0 40px rgba(34, 211, 238, 0.6);
-            z-index: 10;
-            font-family: 'Courier New', Courier, monospace, sans-serif;
-            opacity: 0; 
-            transform: scale(0.6);
-        }
-        @keyframes countAnim {
-            0% { transform: scale(0.5); opacity: 0; filter: blur(5px); }
-            15% { transform: scale(1.05); opacity: 1; filter: blur(0); }
-            85% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.3); opacity: 0; filter: blur(3px); }
-        }
-
-        /* 🖥️ [꽉찬화면 모드 스타일] 화면 가로 구조 유지 */
         @media screen {
             body.fit-screen .main-content { padding: 0; overflow: hidden; }
             body.fit-screen #captureArea { height: 100vh; padding: 2vh 2vw; box-sizing: border-box; display: flex; flex-direction: column; max-width: none; }
@@ -286,22 +219,16 @@
             body.fit-screen #mainTitle { font-size: 4vh; margin: 0; }
             body.fit-screen .podium { padding: 1vh; font-size: 2.5vh; margin: 1vh auto 2vh auto; width: 300px; }
             body.fit-screen .seating-grid { flex: 1 1 0; min-height: 0; display: grid; gap: 1.5vh; align-content: stretch; grid-auto-rows: minmax(0, 1fr); }
-            
-            body.fit-screen .seat-box:not(.empty-seat) { 
-                padding: 0; height: 100%; min-height: 0; box-sizing: border-box; 
-                display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: space-between; overflow: hidden;
-                aspect-ratio: auto;
-            }
+            body.fit-screen .seat-box:not(.empty-seat) { padding: 0; height: 100%; min-height: 0; box-sizing: border-box; display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: space-between; overflow: hidden; aspect-ratio: auto; }
             body.fit-screen .student-img { width: 65%; height: 150%; align-self: flex-start; }
-            body.fit-screen .student-name { width: 35%; font-size: min(1.6rem, 3vh); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+            body.fit-screen .student-name { width: 35%; font-size: min(1.6rem, 3vh); display: flex; flex-direction: column; align-items: center; justify-content: center; font-weight: 800; }
             body.fit-screen .seat-box.empty-seat { flex-direction: column; justify-content: center; align-items: center; }
             body.fit-screen .message-display { font-size: min(1.1rem, 2vh); padding: 1vh 2vw; margin-top: 1vh; }
         }
 
-        /* 🖨️ [인쇄 및 이미지 저장 전용 CSS] 최초의 완벽했던 원본 상태로 강제 복구 */
         @media print {
             html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: hidden !important; }
-            .sidebar, #modal, .pin-btn-container, #emptyState, .credit-btn, #customToast, #countdownOverlay { display: none !important; }
+            .sidebar, #modal, #guideModal, .pin-btn-container, #emptyState, .credit-btn, #customToast, #countdownOverlay { display: none !important; }
             .main-content { padding: 0 !important; display: flex !important; width: 100% !important; height: 100% !important; overflow: hidden !important; }
             #captureArea { width: 100% !important; height: 100% !important; max-width: none !important; padding: 4mm !important; background: white !important; box-sizing: border-box !important; display: flex !important; flex-direction: column !important; }
             .header-group { flex-shrink: 0 !important; margin-bottom: 1mm !important; }
@@ -311,68 +238,15 @@
             .message-display { flex-shrink: 0 !important; margin: 2mm 0 !important; font-size: 12pt !important; color: black !important; font-weight: 800 !important; text-align: left !important; padding: 2mm 4mm !important; border: 1.5px solid black !important; border-radius: 8px !important; background: white !important; }
             .school-logo-container { flex-shrink: 0 !important; margin-top: auto !important; padding: 2mm 0 !important; display: flex !important; }
             .school-logo { max-width: 200px !important; opacity: 1 !important; border-radius: 0 !important; padding: 0 !important; box-shadow: none !important; }
-            
-            .seating-grid { 
-                flex: 1 1 0 !important; 
-                min-height: 0 !important; 
-                display: grid !important; 
-                grid-template-columns: repeat(var(--grid-cols), 1fr) !important;
-                gap: var(--print-gap) !important; 
-                align-content: stretch !important; 
-                grid-auto-rows: minmax(0, 1fr) !important; 
-            }
-            
-            .seat-box { 
-                background: white !important; 
-                border: 1.5px solid black !important; 
-                border-radius: 8px !important; 
-                box-shadow: none !important; 
-                padding: var(--print-box-padding) !important; 
-                display: flex !important; 
-                flex-direction: column !important; 
-                align-items: center !important; 
-                justify-content: center !important; 
-                height: 100% !important; 
-                box-sizing: border-box !important; 
-                min-height: 0 !important; 
-                overflow: hidden !important; 
-                aspect-ratio: auto !important; 
-                page-break-inside: avoid !important;
-            }
+            .seating-grid { flex: 1 1 0 !important; min-height: 0 !important; display: grid !important; grid-template-columns: repeat(var(--grid-cols), 1fr) !important; gap: var(--print-gap) !important; align-content: stretch !important; grid-auto-rows: minmax(0, 1fr) !important; }
+            .seat-box { background: white !important; border: 1.5px solid black !important; border-radius: 8px !important; box-shadow: none !important; padding: var(--print-box-padding) !important; display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important; height: 100% !important; box-sizing: border-box !important; min-height: 0 !important; overflow: hidden !important; aspect-ratio: auto !important; page-break-inside: avoid !important; }
             .seat-box.empty-seat { border: 1.5px dashed #ccc !important; }
             .empty-seat-text { display: none !important; }
-            
-            .student-img { 
-                display: block !important;
-                width: 100% !important; 
-                height: auto !important; 
-                max-height: 82% !important; 
-                flex: 1 1 auto !important;
-                min-height: 0 !important;
-                aspect-ratio: 1 / 1.15 !important; 
-                object-fit: cover !important; 
-                object-position: center 8% !important; 
-                background: transparent !important; 
-                border-radius: 6px !important; 
-                transform: none !important; 
-                margin: 0 0 1mm 0 !important;
-            }
-            
-            .student-name { 
-                display: block !important;
-                width: 100% !important; 
-                height: auto !important;
-                flex-shrink: 0 !important; 
-                font-size: var(--print-name-font) !important; 
-                color: black !important; 
-                line-height: 1.2 !important; 
-                text-align: center !important; 
-                font-weight: 800 !important; 
-                writing-mode: horizontal-tb !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-            .seating-grid.hide-photos .student-name { font-size: calc(var(--print-name-font) * 1.8) !important; max-height: none !important; }
+            .student-img { display: block !important; width: 100% !important; height: auto !important; max-height: 82% !important; flex: 1 1 auto !important; min-height: 0 !important; aspect-ratio: 1 / 1.15 !important; object-fit: cover !important; object-position: center 8% !important; background: transparent !important; border-radius: 6px !important; transform: none !important; margin: 0 0 1mm 0 !important; }
+            .student-name { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; width: 100% !important; height: auto !important; flex-shrink: 0 !important; font-size: var(--print-name-font) !important; color: black !important; line-height: 1.1 !important; text-align: center !important; font-weight: 800 !important; margin: 0 !important; padding: 0 !important; }
+            .seat-number { display: block !important; font-size: 0.8em !important; margin-bottom: 2px !important; }
+            .seat-name { display: block !important; }
+            .seating-grid.hide-photos .student-name { font-size: calc(var(--print-name-font) * 1.6) !important; max-height: none !important; }
         }
     </style>
     <style id="dynamicPrintStyle"> @media print { @page { size: A4 portrait; margin: 5mm; } } </style>
@@ -380,6 +254,11 @@
 <body id="bodyTag" class="intro-mode">
 
     <aside class="sidebar">
+        <section class="highlight-section step0">
+            <div class="h-title">⚙️ 나이스 사진 준비</div>
+            <button class="btn btn-accent" onclick="document.getElementById('guideModal').style.display='flex'">🗂️ 사진 추출 매크로 가이드</button>
+        </section>
+
         <section class="highlight-section step1">
             <h2 style="margin-top: 0; color: #8b5cf6; font-size: 1.15rem; border-left: 4px solid #8b5cf6; padding-left: 10px;">[STEP 1] 기본 설정</h2>
             
@@ -403,7 +282,9 @@
             
             <div class="choice-group">
                 <div class="step2-choice-btn" onclick="document.getElementById('photoInput').click()">
-                    <span id="uploadText">1. 학생 사진 폴더 선택</span>
+                    <div id="uploadText" style="display:flex; flex-direction:column; width:100%; text-align:center;">
+                        <span style="align-self: flex-start;">1. 학생 사진 폴더 선택</span>
+                    </div>
                 </div>
                 <input type="file" id="photoInput" multiple accept="image/*" style="display:none">
                 
@@ -418,7 +299,7 @@
             <button type="button" class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">🎲 무작위 배치 시작</button>
             <div class="btn-row" style="margin-top: 10px;">
                 <button type="button" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px;" onclick="resetPins()">모든 고정 해제</button>
-                <button type="button" id="fitScreenBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 꽉찬화면(OFF)</button>
+                <button type="button" id="fitScreenBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 꽉찬화면 실행</button>
             </div>
         </section>
 
@@ -427,7 +308,7 @@
             
             <textarea id="messageInput" class="custom-message-input" placeholder="출력물 하단 당부 말씀&#10;예) 허락 없는 자리 이동 금지"></textarea>
             
-            <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.2); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
+            <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.15); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
                 <input type="checkbox" id="hidePhotoCheck" style="width: 20px; height: 20px; accent-color: #f43f5e; cursor: pointer;">
                 <span style="font-size: 0.95rem;">사진 숨기기 (<span style="color:#f43f5e; font-weight:bold;">가로 인쇄</span> 모드 전환)</span>
             </label>
@@ -438,7 +319,7 @@
             </div>
         </section>
 
-        <section style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+        <section style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 10px;">
             <h2 style="font-size: 0.95rem; color: #cbd5e1; margin-top: 0; border: none; padding: 0; margin-bottom: 10px;">좌석 데이터 관리 (백업/복구)</h2>
             <div class="btn-row">
                 <button type="button" class="btn btn-sub" style="border: 1px solid #10b981; color: #10b981; font-size: 0.9rem;" onclick="document.getElementById('backupInput').click()">불러오기</button>
@@ -449,15 +330,100 @@
 
         <div class="usage-tips">
             <h3>사용 안내 및 팁</h3>
-            <p style="margin:0; line-height:1.7; word-break:keep-all;">
-                💡 <strong>[이름 입력 및 이동]</strong> 좌석을 <strong>더블클릭</strong>하면 이름을 직접 수정할 수 있고, <strong>드래그</strong>하여 서로의 자리를 바꿀 수 있습니다.<br><br>
-                📂 <strong>[사진 파일명]</strong>은 '이름.jpg' 또는 '번호.이름.jpg' 모두 가능합니다.<br><br>
-                🎁 <strong>[안내]</strong> 본 시스템에는 사용의 재미를 더하기 위한 작은 <strong>이스터에그(Easter Egg)</strong>가 숨겨져 있습니다. 어떤 기능인지 궁금하시거나 힌트가 필요하신 분은 <strong>개발자(KimJongho)에게 문의</strong>해 주세요! ✨
-            </p>
+            <ul>
+                <li><strong>[사진파일명]</strong> 학생 이름과 연동되어 있습니다. 사진업로드시 좌석 이름이 자동 삽입됩니다. '이름.jpg' 또는 '번호 + 이름' 모두 가능합니다. '번호+이름'으로 할경우 번호와 이름은 구분되어 입력됩니다.</li>
+                <li><strong>[사진없이 이름 입력]</strong> 더블클릭하면 이름을 직접 입력이 가능합니다.</li>
+                <li><strong>[자리 고정 및 이동]</strong> 특정 학생을 특정 자리에 고정하고자 하면 자리 우상단의 핀을 클릭하면 고정됩니다. 자리 이동시에는 drag & drop(끌어놓기)하시면 두 자리가 교체됩니다.</li>
+                <li><strong>[이스터에그]</strong> 이 시스템에는 개발자가 숨겨둔 교사의 유용한 기능이 숨겨져 있습니다. 궁금하시면 개발자에게 연락해 주세요.</li>
+            </ul>
         </div>
         
         <button type="button" class="credit-btn" onclick="saveSecretPlan()">© Made by KimJongho</button>
     </aside>
+
+    <div id="guideModal" onclick="this.style.display='none'">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 style="color:var(--primary); margin-top: 0;">📸 나이스 사진 일괄 추출 및 이름 변경 매크로</h3>
+            <p style="color: #cbd5e1; line-height: 1.6;">
+                1. 원본 엑셀 파일을 엽니다. (※ 상단 '편집 사용' 버튼 클릭 필수)<br>
+                2. 키보드에서 <strong>Alt + F11</strong>을 눌러 매크로 창을 엽니다.<br>
+                3. 상단 메뉴 <strong>삽입 > 모듈</strong>을 클릭합니다.<br>
+                4. 아래의 코드를 복사하여 빈 창에 붙여넣습니다.<br>
+                5. <strong>F5 키</strong>를 눌러 실행한 뒤, 사진을 저장할 바탕화면 폴더를 선택하세요!
+            </p>
+            
+            <div class="code-container">
+                <button class="copy-btn" onclick="copyMacroCode()">📋 코드 복사</button>
+                <pre id="macroCodeText">
+Sub AutoExtractAndRenamePhotos_Final()
+    Dim shp As Shape
+    Dim targetCell As Range
+    Dim studentInfo As String
+    Dim saveFolder As String
+    Dim chtObj As ChartObject
+    Dim folderPicker As FileDialog
+    Dim parts() As String
+    Dim studentNum As String
+    Dim studentName As String
+
+    Set folderPicker = Application.FileDialog(msoFileDialogFolderPicker)
+    folderPicker.Title = "사진을 저장할 폴더를 선택하세요"
+    If folderPicker.Show = -1 Then
+        saveFolder = folderPicker.SelectedItems(1) & "\"
+    Else
+        Exit Sub
+    End If
+
+    Application.ScreenUpdating = False
+    ActiveSheet.Activate
+
+    For Each shp In ActiveSheet.Shapes
+        If shp.Type = 13 Then
+            Set targetCell = shp.TopLeftCell
+            studentInfo = Trim(targetCell.Offset(1, 0).Text)
+            
+            If studentInfo = "" Then studentInfo = Trim(targetCell.Offset(1, -1).Text)
+            
+            If InStr(studentInfo, "번") > 0 Then
+                parts = Split(studentInfo, "번")
+                studentNum = Trim(parts(0))
+                studentName = Trim(parts(1))
+                studentName = studentNum & ". " & studentName
+            Else
+                studentName = studentInfo
+            End If
+            
+            studentName = Replace(studentName, "/", "_")
+            studentName = Replace(studentName, "\", "_")
+            studentName = Replace(studentName, ":", "_")
+            
+            If studentName = "" Or studentName = "." Then studentName = "이름없음_" & Format(Now, "hhmmss")
+
+            shp.Copy
+            DoEvents 
+            
+            Set chtObj = ActiveSheet.ChartObjects.Add(0, 0, shp.Width, shp.Height)
+            With chtObj
+                .Border.LineStyle = -4142
+                .Activate
+                ActiveChart.Paste
+                On Error Resume Next
+                ActiveChart.Export saveFolder & studentName & ".jpg", "JPG"
+                On Error GoTo 0
+                .Delete
+            End With
+        End If
+    Next shp
+
+    Application.ScreenUpdating = True
+    MsgBox "✅ 사진 추출 및 이름 변경 완료! (1. 강시윤 형식으로 저장됨)", vbInformation
+End Sub
+                </pre>
+            </div>
+            
+            <button class="btn" style="background:#475569; margin-top: 15px;" onclick="document.getElementById('guideModal').style.display='none'">닫기</button>
+        </div>
+    </div>
 
     <main class="main-content">
         <div id="captureArea">
@@ -562,11 +528,22 @@
             const isHide = document.getElementById('hidePhotoCheck').checked;
             root.style.setProperty('--grid-cols', currentCols);
             const total = currentCols * currentRows;
-            if (total > 25) {
+            
+            if (total > 36) {
+                root.style.setProperty('--gap-size', '8px');
+                root.style.setProperty('--name-font', '0.85rem');
+                root.style.setProperty('--print-name-font', isHide ? '14pt' : '8pt');
+            } else if (total > 25) {
                 root.style.setProperty('--gap-size', '12px');
+                root.style.setProperty('--name-font', '1rem');
                 root.style.setProperty('--print-name-font', isHide ? '18pt' : '10pt');
+            } else if (total > 16) {
+                root.style.setProperty('--gap-size', '18px');
+                root.style.setProperty('--name-font', '1.15rem');
+                root.style.setProperty('--print-name-font', isHide ? '20pt' : '11pt');
             } else {
                 root.style.setProperty('--gap-size', '25px');
+                root.style.setProperty('--name-font', '1.4rem');
                 root.style.setProperty('--print-name-font', isHide ? '24pt' : '12.5pt');
             }
         }
@@ -601,8 +578,17 @@
             
             students = files.map(file => {
                 const lastDotIndex = file.name.lastIndexOf('.');
-                const nameOnly = (lastDotIndex === -1) ? file.name : file.name.substring(0, lastDotIndex);
-                return { name: nameOnly, imgSrc: URL.createObjectURL(file), isPinned: false };
+                const nameRaw = (lastDotIndex === -1) ? file.name : file.name.substring(0, lastDotIndex);
+                
+                let number = '';
+                let name = nameRaw;
+                const match = nameRaw.match(/^(\d+)[_.\-\s]*(.+)$/);
+                if (match) {
+                    number = match[1];
+                    name = match[2];
+                }
+                
+                return { name: name, number: number, imgSrc: URL.createObjectURL(file), isPinned: false };
             });
             
             const opt = getOptimalGrid(students.length);
@@ -612,7 +598,7 @@
             
             applyGridStyle(); rebuildSeatsArray(); renderGrid(false);
             
-            document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택 (완료: ${students.length}명)`;
+            syncStudentsArray();
             e.target.value = '';
         });
 
@@ -630,11 +616,17 @@
         }
 
         function syncStudentsArray() {
-            students = seats.filter(s => s.type === 'student').map(s => ({ name: s.name, imgSrc: s.imgSrc, isPinned: s.isPinned }));
+            students = seats.filter(s => s.type === 'student').map(s => ({ name: s.name, number: s.number, imgSrc: s.imgSrc, isPinned: s.isPinned }));
+            
             if(students.length > 0) {
-                document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택 (완료: ${students.length}명)`;
+                document.getElementById('uploadText').innerHTML = `
+                    <span style="align-self: flex-start;">1. 학생 사진 폴더 선택</span>
+                    <span style="font-size:0.9em; color:var(--primary); margin-top:6px; font-weight:700; width:100%; text-align:center; display:block;">(완료: ${students.length}명)</span>
+                `;
             } else {
-                document.getElementById('uploadText').innerText = `1. 학생 사진 폴더 선택`;
+                document.getElementById('uploadText').innerHTML = `
+                    <span style="align-self: flex-start;">1. 학생 사진 폴더 선택</span>
+                `;
             }
         }
 
@@ -668,8 +660,16 @@
 
                 if (seat.type === 'student') {
                     if (seat.isPinned) div.classList.add('is-pinned');
+                    
+                    let nameHtml = '';
+                    if (seat.number) {
+                        nameHtml = `<span class="seat-number">${seat.number}</span><span class="seat-name">${seat.name}</span>`;
+                    } else {
+                        nameHtml = `<span class="seat-name">${seat.name}</span>`;
+                    }
+
                     div.innerHTML = `<div class="pin-btn-container" onclick="togglePin(event, ${idx})"><span class="pin-icon">${seat.isPinned ? '📌' : '📍'}</span></div>
-                                     <img class="student-img" src="${seat.imgSrc}"><div class="student-name">${seat.name}</div>`;
+                                     <img class="student-img" src="${seat.imgSrc}"><div class="student-name">${nameHtml}</div>`;
                 } else {
                     div.classList.add('empty-seat');
                     div.innerHTML = `<span class="empty-seat-text"><span style="font-size:1.5rem">+</span><br>더블클릭 입력</span>`;
@@ -703,11 +703,11 @@
             if (window.isEditing) return;
             window.isEditing = true;
             const box = e.currentTarget;
-            const currentName = seats[idx].type === 'student' ? seats[idx].name : '';
+            const currentNameRaw = seats[idx].type === 'student' ? (seats[idx].number ? `${seats[idx].number} ${seats[idx].name}` : seats[idx].name) : '';
             
             const input = document.createElement('input');
             input.type = 'text';
-            input.value = currentName;
+            input.value = currentNameRaw;
             input.className = 'edit-name-input';
             input.placeholder = "이름 입력";
             
@@ -719,12 +719,21 @@
             const saveHandler = () => {
                 if(!window.isEditing) return;
                 window.isEditing = false;
-                const newName = input.value.trim();
-                if (newName === '') {
+                const newNameRaw = input.value.trim();
+                
+                if (newNameRaw === '') {
                     seats[idx] = { type: 'empty' };
                 } else {
+                    let number = '';
+                    let name = newNameRaw;
+                    const match = newNameRaw.match(/^(\d+)[_.\-\s]*(.+)$/);
+                    if (match) {
+                        number = match[1];
+                        name = match[2];
+                    }
+                    
                     let imgSrc = seats[idx].imgSrc || defaultAvatar; 
-                    seats[idx] = { type: 'student', name: newName, imgSrc: imgSrc, isPinned: seats[idx].isPinned || false };
+                    seats[idx] = { type: 'student', name: name, number: number, imgSrc: imgSrc, isPinned: seats[idx].isPinned || false };
                 }
                 syncStudentsArray();
                 renderGrid(false);
@@ -739,7 +748,7 @@
         
         function saveSecretPlan() {
             if (seats.length === 0) return;
-            const secretPlanNames = seats.map(s => s.type === 'student' ? s.name : "X");
+            const secretPlanNames = seats.map(s => s.type === 'student' ? (s.number ? `${s.number}_${s.name}` : s.name) : "X");
             localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
             showCustomToast("스마트 좌석 배치 시스템 v2.0\n선생님, 오늘 하루도 응원합니다! ✨");
         }
@@ -787,9 +796,9 @@
                 if (savedPlan) {
                     try {
                         const planNames = JSON.parse(savedPlan);
-                        let newSeats = planNames.map(name => {
-                            if (name === "X") return { type: 'empty' };
-                            const foundStudent = students.find(st => st.name === name);
+                        let newSeats = planNames.map(nameRaw => {
+                            if (nameRaw === "X") return { type: 'empty' };
+                            const foundStudent = students.find(st => (st.number ? `${st.number}_${st.name}` : st.name) === nameRaw) || students.find(st => st.name === nameRaw);
                             return foundStudent ? { type: 'student', ...foundStudent, isPinned: false } : { type: 'empty' };
                         });
                         
@@ -830,7 +839,7 @@
             const classInfo = document.getElementById('classInfoInput').value.trim();
             const fileName = classInfo ? `${classInfo}_좌석백업.json` : "좌석배치백업.json";
             
-            const planNames = seats.map(s => s.type === 'student' ? s.name : "X");
+            const planNames = seats.map(s => s.type === 'student' ? (s.number ? `${s.number}_${s.name}` : s.name) : "X");
             const payload = { c: currentCols, r: currentRows, p: planNames };
             
             const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
@@ -861,11 +870,20 @@
                     
                     document.getElementById('emptyState').style.display = 'none';
 
-                    seats = savedData.p.map(name => {
-                        if (name === "X") return { type: 'empty' };
-                        const foundStudent = students.find(st => st.name === name);
+                    seats = savedData.p.map(nameRaw => {
+                        if (nameRaw === "X") return { type: 'empty' };
+                        
+                        let number = '';
+                        let name = nameRaw;
+                        const match = nameRaw.match(/^(\d+)[_.\-\s]*(.+)$/);
+                        if (match) {
+                            number = match[1];
+                            name = match[2];
+                        }
+
+                        const foundStudent = students.find(st => st.name === name && st.number === number) || students.find(st => st.name === nameRaw);
                         return foundStudent ? { type: 'student', ...foundStudent, isPinned: false } 
-                                            : { type: 'student', name: name, imgSrc: defaultAvatar, isPinned: false };
+                                            : { type: 'student', name: name, number: number, imgSrc: defaultAvatar, isPinned: false };
                     });
                     
                     syncStudentsArray();
@@ -885,12 +903,12 @@
             const btn = document.getElementById('fitScreenBtn');
             if (isFitScreen) {
                 body.classList.add('fit-screen');
-                btn.innerHTML = '🖥️ 꽉찬화면(ON)';
+                btn.innerHTML = '🖥️ 일반화면 복귀';
                 btn.style.background = 'var(--primary)';
                 btn.style.color = '#0f172a';
             } else {
                 body.classList.remove('fit-screen');
-                btn.innerHTML = '🖥️ 꽉찬화면(OFF)';
+                btn.innerHTML = '🖥️ 꽉찬화면 실행';
                 btn.style.background = 'transparent';
                 btn.style.color = 'var(--primary)';
             }
@@ -932,6 +950,24 @@
                 document.getElementById('captureArea').insertBefore(podium, document.getElementById('emptyState'));
             }
         }
+
+        // 💡 팝업창 내 매크로 코드 복사 기능
+        function copyMacroCode() {
+            const codeText = document.getElementById('macroCodeText').innerText;
+            navigator.clipboard.writeText(codeText).then(() => {
+                showCustomToast("📋 매크로 코드가 복사되었습니다!\n엑셀(VBA) 창에 붙여넣기 하세요.");
+            }).catch(err => {
+                // 클립보드 API 지원 안 할 경우 Fallback
+                const textArea = document.createElement("textarea");
+                textArea.value = codeText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("Copy");
+                textArea.remove();
+                showCustomToast("📋 매크로 코드가 복사되었습니다!\n엑셀(VBA) 창에 붙여넣기 하세요.");
+            });
+        }
+
         applyGridStyle();
     </script>
 </body>
