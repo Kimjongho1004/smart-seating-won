@@ -30,13 +30,15 @@
             --pin-icon: 20px;
         }
 
+        /* 💡 전역 커스텀 스크롤바 디자인 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.4); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.3); border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(34, 211, 238, 0.6); }
+
         body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; margin: 0; display: flex; flex-direction: row-reverse; height: 100vh; background-color: var(--bg-dark); color: var(--text-main); overflow: hidden; user-select: none; }
         
         .sidebar { width: var(--sidebar-width); background: var(--card-bg); padding: 25px; border-left: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; gap: 15px; overflow-y: auto; box-shadow: -5px 0 15px rgba(0,0,0,0.3); z-index: 100; flex-shrink: 0; box-sizing: border-box; }
-        .sidebar::-webkit-scrollbar { width: 6px; }
-        .sidebar::-webkit-scrollbar-track { background: transparent; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
 
         body.intro-mode .sidebar { margin-right: calc(-1 * var(--sidebar-width)); transform: translateX(100%); opacity: 0; pointer-events: none; }
         body.intro-mode #emptyState { cursor: pointer; transition: transform 0.3s ease; }
@@ -58,8 +60,6 @@
         .btn-main:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(34, 211, 238, 0.3); }
         .btn-sub { background: #475569; color: white; }
         .btn-sub:hover { background: #64748b; }
-        .btn-accent { background: var(--primary); color: var(--bg-dark); }
-        .btn-accent:hover { background: #a5f3fc; }
 
         .highlight-section { padding: 22px; border-radius: 16px; margin: 4px 0; background: linear-gradient(145deg, var(--section-bg), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
         .step1 { background: linear-gradient(145deg, var(--section-bg), rgba(139, 92, 246, 0.12)); border-color: rgba(139, 92, 246, 0.35); }
@@ -81,7 +81,33 @@
         .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
         .custom-message-input:focus { outline: none; border-color: #f43f5e; }
         
-        /* 💡 사용 안내 및 팁 정제 (이모티콘 제거) */
+        /* 💡 커스텀 체크박스 및 라벨 컨테이너 디자인 */
+        .checkbox-label {
+            display: flex; align-items: center; gap: 12px; margin: 10px 0; cursor: pointer; 
+            background: rgba(0,0,0,0.15); padding: 12px 15px; border-radius: 8px; 
+            border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s;
+        }
+        .checkbox-label:hover {
+            background: rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.2);
+        }
+        
+        input[type="checkbox"] {
+            appearance: none; -webkit-appearance: none; width: 22px; height: 22px; min-width: 22px;
+            border: 2px solid var(--text-dim); border-radius: 6px; background-color: rgba(15, 23, 42, 0.5);
+            cursor: pointer; position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); margin: 0;
+        }
+        input[type="checkbox"]:hover { border-color: var(--primary); box-shadow: 0 0 8px rgba(34, 211, 238, 0.3); }
+        input[type="checkbox"]:checked { background-color: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px rgba(34, 211, 238, 0.4); }
+        input[type="checkbox"]:checked::after {
+            content: ''; position: absolute; top: 3px; left: 7px; width: 4px; height: 9px;
+            border: solid var(--bg-dark); border-width: 0 2.5px 2.5px 0; transform: rotate(45deg);
+        }
+
+        /* 💡 사진 숨기기 전용 (Rose 테마 적용) */
+        #hidePhotoCheck:hover { border-color: var(--pinned-color); box-shadow: 0 0 8px rgba(244, 63, 94, 0.3); }
+        #hidePhotoCheck:checked { background-color: var(--pinned-color); border-color: var(--pinned-color); box-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+        #hidePhotoCheck:checked::after { border-color: #fff; }
+        
         .usage-tips { margin-top: auto; padding: 18px 15px; background: rgba(0,0,0,0.15); border-radius: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; border: 1px solid rgba(255,255,255,0.08); }
         .usage-tips h3 { color: var(--primary); font-size: 0.95rem; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.1); letter-spacing: 0.5px; font-weight: 700; }
         .usage-tips ul { list-style: none; padding: 0; margin: 0; word-break: keep-all; }
@@ -120,7 +146,7 @@
 
         .student-img { width: 60%; height: 150%; object-fit: cover; object-position: top center; background: #2d3748; pointer-events: none; align-self: flex-start; }
         
-        .student-name { width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: clamp(0.6rem, 10cqw, var(--name-font)); line-height: 1.15; letter-spacing: 0px; pointer-events: none; margin: 0; padding: 4px; box-sizing: border-box; height: 100%; white-space: nowrap; overflow: hidden; }
+        .student-name { width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; font-weight: 800; font-size: clamp(0.6rem, 10cqw, var(--name-font)); line-height: 1.15; letter-spacing: 0px; pointer-events: none; margin: 0; padding: 4px; box-sizing: border-box; height: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .seat-number { font-size: clamp(0.5rem, 7cqw, 0.85em); opacity: 0.85; margin-bottom: 2px; }
         .seat-name { font-size: clamp(0.6rem, 10cqw, 1em); }
         
@@ -198,6 +224,7 @@
 <body id="bodyTag" class="intro-mode">
 
     <aside class="sidebar">
+
         <section class="highlight-section step1">
             <h2 style="margin-top: 0; color: #8b5cf6; font-size: 1.15rem; border-left: 4px solid #8b5cf6; padding-left: 10px;">[STEP 1] 기본 설정</h2>
             
@@ -215,8 +242,8 @@
                 <button type="button" class="btn btn-sub" style="width:100%; padding: 10px; margin-top: 5px;" onclick="applyLayoutSettings()">격자 적용 / 초기화</button>
             </div>
 
-            <label style="display: flex; align-items: center; gap: 8px; margin-top: 15px; cursor: pointer; background: rgba(0,0,0,0.15); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                <input type="checkbox" id="pairLayoutCheck" style="width: 18px; height: 18px; accent-color: var(--primary);">
+            <label class="checkbox-label">
+                <input type="checkbox" id="pairLayoutCheck">
                 <span style="font-size: 0.95rem; color: var(--text-main); font-weight: bold;">짝배열 모드 (두 줄씩 띄어 앉기)</span>
             </label>
         </section>
@@ -250,33 +277,35 @@
             <h2 style="margin-top: 0; color: var(--primary); font-size: 1.15rem; border-left: 4px solid var(--primary); padding-left: 10px;">[STEP 3] 배치 실행</h2>
             
             <div class="btn-row" style="margin-bottom: 10px;">
-                <button type="button" id="pairModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px; border: 1px solid var(--pair-color); color: var(--pair-color); background: transparent;" onclick="togglePairMode()">짝꿍 설정 (OFF)</button>
-                <button type="button" id="avoidModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px; border: 1px solid var(--avoid-color); color: var(--avoid-color); background: transparent;" onclick="toggleAvoidMode()">기피 설정 (OFF)</button>
+                <button type="button" id="pairModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px; border: 1px solid var(--pair-color); color: var(--pair-color); background: transparent;" onclick="togglePairMode()">🔗 짝꿍 설정 (OFF)</button>
+                <button type="button" id="avoidModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px; border: 1px solid var(--avoid-color); color: var(--avoid-color); background: transparent;" onclick="toggleAvoidMode()">⛔ 기피 설정 (OFF)</button>
             </div>
 
-            <button type="button" class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">무작위 배치 시작</button>
+            <button type="button" class="btn btn-shuffle" onclick="startCountdownAndShuffle(event)">🎲 무작위 배치 시작</button>
             
-            <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer; background: rgba(0,0,0,0.15); padding: 10px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.2s;">
-                <input type="checkbox" id="skipAnimCheck" style="width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer;">
+            <label class="checkbox-label">
+                <input type="checkbox" id="skipAnimCheck">
                 <span style="font-size: 0.9rem; color: #cbd5e1; font-weight: 500;">빠른 배치 (카운트다운 및 효과 최소화)</span>
             </label>
 
             <div class="btn-row" style="margin-top: 10px;">
                 <button type="button" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px;" onclick="resetPins()">모든 고정 해제</button>
-                <button type="button" id="fitScreenBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">꽉찬화면 실행</button>
+                <button type="button" id="fitScreenBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 10px; border: 1px solid var(--primary); color: var(--primary); background: transparent;" onclick="toggleFitScreen()">🖥️ 꽉찬화면 실행</button>
             </div>
         </section>
 
         <section class="highlight-section step4">
             <h2 style="margin-top: 0; color: #f43f5e; font-size: 1.15rem; border-left: 4px solid #f43f5e; padding-left: 10px;">[STEP 4] 인쇄 / 저장</h2>
             <textarea id="messageInput" class="custom-message-input" placeholder="출력물 하단 당부 말씀&#10;예) 허락 없는 자리 이동 금지"></textarea>
-            <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.15); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: all 0.2s;">
-                <input type="checkbox" id="hidePhotoCheck" style="width: 20px; height: 20px; accent-color: #f43f5e; cursor: pointer;">
+            
+            <label class="checkbox-label" style="margin: 10px 0;">
+                <input type="checkbox" id="hidePhotoCheck">
                 <span style="font-size: 0.95rem;">사진 숨기기 (<span style="color:#f43f5e; font-weight:bold;">가로 인쇄</span> 모드 전환)</span>
             </label>
+
             <div class="btn-row" style="margin-top: 15px;">
-                <button type="button" class="btn-step4" onclick="openModal('student')">학생용 출력</button>
-                <button type="button" class="btn-step4" style="background: linear-gradient(135deg, #be123c, #9f1239);" onclick="openModal('teacher')">교사용 출력</button>
+                <button type="button" class="btn-step4" onclick="openModal('student')">🖨️ 학생용 출력</button>
+                <button type="button" class="btn-step4" style="background: linear-gradient(135deg, #be123c, #9f1239);" onclick="openModal('teacher')">🖨️ 교사용 출력</button>
             </div>
         </section>
 
@@ -483,7 +512,7 @@
             }
             updatePairBtn();
             selectedForPair = []; selectedForAvoid = []; renderGrid(false);
-            if(isPairMode) showCustomToast("짝꿍 설정 모드 ON\n나란히 앉힐 두 학생을 차례로 클릭하세요.");
+            if(isPairMode) showCustomToast("🔗 짝꿍 설정 모드 ON\n나란히 앉힐 두 학생을 차례로 클릭하세요.");
         }
 
         function toggleAvoidMode() {
@@ -493,17 +522,17 @@
             }
             updateAvoidBtn();
             selectedForPair = []; selectedForAvoid = []; renderGrid(false);
-            if(isAvoidMode) showCustomToast("기피 설정 모드 ON\n멀리 떨어뜨릴 두 학생을 차례로 클릭하세요.");
+            if(isAvoidMode) showCustomToast("⛔ 기피 설정 모드 ON\n멀리 떨어뜨릴 두 학생을 차례로 클릭하세요.");
         }
 
         function updatePairBtn() {
             const btn = document.getElementById('pairModeBtn');
             if (isPairMode) {
-                btn.innerText = '짝꿍 설정 (ON)';
+                btn.innerText = '🔗 짝꿍 설정 (ON)';
                 btn.style.background = 'var(--pair-color)';
                 btn.style.color = '#0f172a';
             } else {
-                btn.innerText = '짝꿍 설정 (OFF)';
+                btn.innerText = '🔗 짝꿍 설정 (OFF)';
                 btn.style.background = 'transparent';
                 btn.style.color = 'var(--pair-color)';
             }
@@ -512,11 +541,11 @@
         function updateAvoidBtn() {
             const btn = document.getElementById('avoidModeBtn');
             if (isAvoidMode) {
-                btn.innerText = '기피 설정 (ON)';
+                btn.innerText = '⛔ 기피 설정 (ON)';
                 btn.style.background = 'var(--avoid-color)';
                 btn.style.color = '#fff';
             } else {
-                btn.innerText = '기피 설정 (OFF)';
+                btn.innerText = '⛔ 기피 설정 (OFF)';
                 btn.style.background = 'transparent';
                 btn.style.color = 'var(--avoid-color)';
             }
@@ -715,7 +744,7 @@
                                     showCustomToast("짝꿍 관계가 해제되었습니다.");
                                 } else {
                                     s1.pairId = currentPairId; s2.pairId = currentPairId++;
-                                    showCustomToast("짝꿍이 연결되었습니다!");
+                                    showCustomToast("🔗 짝꿍이 연결되었습니다!");
                                 }
                                 selectedForPair = [];
                             } else if (isAvoidMode) {
@@ -730,7 +759,7 @@
                                 } else {
                                     s1.avoidIds.push(uid2);
                                     s2.avoidIds.push(uid1);
-                                    showCustomToast("기피 관계가 설정되었습니다!");
+                                    showCustomToast("⛔ 기피 관계가 설정되었습니다!");
                                 }
                                 selectedForAvoid = [];
                             }
@@ -754,8 +783,8 @@
                     }
 
                     let badges = '';
-                    if (seat.pairId) badges += `<div class="pair-label">짝꿍</div>`;
-                    if (seat.avoidIds && seat.avoidIds.length > 0) badges += `<div class="avoid-label">기피</div>`;
+                    if (seat.pairId) badges += `<div class="pair-label">🔗 짝꿍</div>`;
+                    if (seat.avoidIds && seat.avoidIds.length > 0) badges += `<div class="avoid-label">⛔ 기피</div>`;
 
                     div.innerHTML = `<div class="pin-btn-container" onclick="togglePin(event, ${idx})"><span class="pin-icon">${seat.isPinned ? '📌' : '📍'}</span></div>
                                      ${badges}
@@ -765,7 +794,6 @@
                     div.innerHTML = `<span class="empty-seat-text"><span style="font-size:1.5rem">+</span><br>더블클릭 입력</span>`;
                 }
                 
-                // 💡 [요청 반영] 애니메이션 끄기 옵션이 활성화되면 트랜지션 클래스 부여를 생략하거나 최소 딜레이로 진행
                 const skipAnim = document.getElementById('skipAnimCheck') ? document.getElementById('skipAnimCheck').checked : false;
                 if (anim && !(seat.isPinned)) {
                     div.classList.add('hidden-state');
@@ -784,7 +812,7 @@
             
             if (anim) {
                 const skipAnim = document.getElementById('skipAnimCheck') ? document.getElementById('skipAnimCheck').checked : false;
-                const delayMs = skipAnim ? 15 : 250; // 빠른 배치 시 15ms의 초고속 이펙트
+                const delayMs = skipAnim ? 15 : 250;
                 
                 let delayCount = 0;
                 document.querySelectorAll('.seat-box').forEach((box) => {
@@ -847,7 +875,7 @@
             if (seats.length === 0) return;
             const secretPlanNames = seats.map(s => s.type === 'student' ? (s.number ? `${s.number}_${s.name}` : s.name) : "X");
             localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
-            showCustomToast("스마트 좌석 배치 시스템 v8.0\n선생님, 오늘 하루도 수고 많으셨습니다! ✨");
+            showCustomToast("스마트 좌석 배치 시스템 v9.0\n선생님, 오늘 하루도 수고 많으셨습니다! ✨");
         }
 
         function triggerAnimation(element) {
@@ -856,7 +884,6 @@
             element.style.animation = 'countAnim 1s cubic-bezier(0.1, 0.8, 0.2, 1) forwards';
         }
 
-        // 💡 [요청 반영] 애니메이션 최소화(빠른 배치) 시 카운트다운 스킵 로직
         function startCountdownAndShuffle(event) {
             if (students.length === 0 || isShuffling) return;
             isShuffling = true;
@@ -865,7 +892,6 @@
             const skipAnim = document.getElementById('skipAnimCheck') ? document.getElementById('skipAnimCheck').checked : false;
 
             if (skipAnim) {
-                // 카운트다운 오버레이 생략하고 즉시 셔플 실행
                 executeActualShuffle(isCtrlPressed);
                 isShuffling = false;
                 return;
