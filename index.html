@@ -25,6 +25,8 @@
             --print-gap: 4mm;
             --name-font: 1.4rem;
             --print-name-font: 12.5pt;
+            --print-img-height: 65%; /* 💡 인쇄 시 사진 자동 비율 변수 */
+            --print-name-height: 35%; /* 💡 인쇄 시 이름 자동 비율 변수 */
             --box-padding: 20px;
             --print-box-padding: 2mm;
             --pin-size: 38px;
@@ -83,9 +85,9 @@
         .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 15px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 60px; line-height: 1.4; transition: border-color 0.3s; }
         .custom-message-input:focus { outline: none; border-color: #f43f5e; }
         
-        /* 커스텀 체크박스 */
         .checkbox-label { display: flex; align-items: center; gap: 12px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.15); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); transition: all 0.2s; }
         .checkbox-label:hover { background: rgba(0,0,0,0.25); border-color: rgba(255,255,255,0.2); }
+        
         input[type="checkbox"] { appearance: none; -webkit-appearance: none; width: 22px; height: 22px; min-width: 22px; border: 2px solid var(--text-dim); border-radius: 6px; background-color: rgba(15, 23, 42, 0.5); cursor: pointer; position: relative; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); margin: 0; }
         input[type="checkbox"]:hover { border-color: var(--primary); box-shadow: 0 0 8px rgba(34, 211, 238, 0.3); }
         input[type="checkbox"]:checked { background-color: var(--primary); border-color: var(--primary); box-shadow: 0 0 10px rgba(34, 211, 238, 0.4); }
@@ -146,7 +148,6 @@
         .seat-number { font-size: 0.7em; opacity: 0.85; margin-bottom: 2px; }
         .seat-name { font-size: 1em; }
         
-        /* 💡 [웹 화면] 사진 숨기기 텍스트 크기 최적화 */
         .seating-grid.hide-photos .student-img { display: none !important; }
         .seating-grid.hide-photos .seat-box { flex-direction: column; justify-content: center; align-items: center; padding: 15px; }
         .seating-grid.hide-photos .student-name { 
@@ -155,7 +156,7 @@
             color: var(--primary); justify-content: center !important; gap: 4px !important;
             white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important;
         }
-        .seating-grid.hide-photos .seat-number { font-size: 0.6em !important; color: var(--text-dim) !important; margin: 0 !important; opacity: 1 !important; line-height: 1 !important; }
+        .seating-grid.hide-photos .seat-number { font-size: 0.55em !important; color: var(--text-dim) !important; margin: 0 !important; opacity: 1 !important; line-height: 1 !important; }
         .seating-grid.hide-photos .seat-name { font-size: 1em !important; margin: 0 !important; line-height: 1 !important; }
 
         .edit-name-input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; padding: 12px 5px; font-size: 1.2rem; font-weight: 700; text-align: center; border: 3px solid var(--primary); border-radius: 8px; background: var(--bg-dark); color: white; z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit; }
@@ -197,7 +198,7 @@
             body.fit-screen .message-display { font-size: min(1.1rem, 2vh); padding: 1vh 2vw; margin-top: 1vh; }
         }
 
-        /* 🖨️ [인쇄용 CSS] 완벽 격리 해결판 */
+        /* 🖨️ [인쇄용 CSS] 절대 깨지지 않는 완벽 해결판 */
         @media print {
             html, body { width: 100% !important; height: 100% !important; margin: 0 !important; padding: 0 !important; background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; overflow: hidden !important; }
             .sidebar, #modal, .pin-btn-container, #emptyState, .credit-btn, #customToast, #countdownOverlay { display: none !important; }
@@ -218,8 +219,17 @@
             .seat-box.empty-seat { border: 1.5px dashed #ccc !important; }
             .empty-seat-text { display: none !important; }
             
-            .student-img { display: block !important; width: 100% !important; height: 65% !important; min-height: 0 !important; object-fit: cover !important; object-position: center 8% !important; background: transparent !important; border-radius: 4px !important; margin: 0 0 1mm 0 !important; }
-            .student-name { display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; width: 100% !important; height: 35% !important; flex-shrink: 0 !important; font-size: var(--print-name-font) !important; color: black !important; margin: 0 !important; padding: 0 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
+            /* 💡 [수정] 사진 포함 출력 시 공간 배분 (사진 크기를 남는 공간으로 자동 팽창) */
+            .student-img { 
+                display: block !important; width: 100% !important; 
+                height: auto !important; flex-grow: 1 !important; flex-shrink: 1 !important;
+                object-fit: cover !important; object-position: top center !important; background: transparent !important; border-radius: 4px !important; margin: 0 0 1mm 0 !important; 
+            }
+            .student-name { 
+                display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; 
+                width: 100% !important; height: auto !important; flex-basis: auto !important; flex-grow: 0 !important; flex-shrink: 0 !important;
+                font-size: var(--print-name-font) !important; color: black !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; 
+            }
             
             .seat-number { display: block !important; font-size: 8pt !important; color: #444 !important; margin-bottom: 1mm !important; line-height: 1 !important; }
             .seat-name { display: block !important; font-size: 11pt !important; font-weight: bold !important; line-height: 1.1 !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; max-width: 100% !important; }
@@ -228,16 +238,21 @@
             .seating-grid.hide-photos .seat-box { justify-content: center !important; padding: 3mm !important; }
             .seating-grid.hide-photos .student-img { display: none !important; }
             .seating-grid.hide-photos .student-name { 
-                height: 100% !important;
+                height: 100% !important; flex-basis: 100% !important;
+                /* 💡 이중 증폭 완벽 제거: JS에서 계산해준 var(--print-name-font) 자체를 그대로 사용 */
                 font-size: var(--print-name-font) !important; 
                 gap: 2mm !important;
             }
             .seating-grid.hide-photos .seat-number { 
+                /* 💡 이름 대비 55% 크기로 맞춰 밸런스 유지 */
                 font-size: 0.55em !important; 
                 margin-bottom: 0 !important; 
             }
             .seating-grid.hide-photos .seat-name { 
                 font-size: 1em !important;
+                white-space: nowrap !important; 
+                overflow: hidden !important; 
+                text-overflow: ellipsis !important; 
             }
             
             .pair-label, .avoid-label { display: none !important; }
@@ -470,7 +485,7 @@
             root.style.setProperty('--grid-rows', currentRows);
             const total = currentCols * currentRows;
             
-            // 💡 화면 폰트 스케일링 (15명이면 크고, 30명이면 작게)
+            // 💡 1. 폰트 배율 인쇄/화면 분리 최적화 로직
             if (total > 36) {
                 root.style.setProperty('--gap-size', '8px');
                 root.style.setProperty('--name-font', isHide ? '1.5rem' : '0.85rem');
@@ -901,7 +916,7 @@
             if (seats.length === 0) return;
             const secretPlanNames = seats.map(s => s.type === 'student' ? (s.number ? `${s.number}_${s.name}` : s.name) : "X");
             localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
-            showCustomToast("스마트 좌석 배치 시스템 v13.0 (최종 화면 최적화)\n선생님, 오늘 하루도 수고 많으셨습니다! ✨");
+            showCustomToast("스마트 좌석 배치 시스템 v14.0 (모든 에러 박멸)\n선생님, 정말 고생 많으셨습니다! ✨");
         }
 
         function triggerAnimation(element) {
