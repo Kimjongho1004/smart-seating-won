@@ -9,6 +9,7 @@
     <style>
         :root {
             --primary: #22d3ee;
+            --primary-hover: #06b6d4;
             --primary-glow: rgba(34, 211, 238, 0.6);
             --bg-dark: #0f172a;
             --card-bg: #1e293b; 
@@ -52,7 +53,8 @@
         body.intro-mode .sidebar-right { margin-right: calc(-1 * var(--sidebar-right-width)); transform: translateX(100%); opacity: 0; pointer-events: none; }
         
         .welcome-character { max-width: 450px; height: auto; border-radius: 20px; filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.15)) drop-shadow(0 15px 25px rgba(0,0,0,0.5)); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease; }
-        body.intro-mode .welcome-character:hover { transform: scale(1.03); filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.6)) drop-shadow(0 25px 35px rgba(0,0,0,0.6)); }
+        body.intro-mode .welcome-character { filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.6)) drop-shadow(0 25px 35px rgba(0,0,0,0.6)); }
+
         
         .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: all 0.3s; margin-bottom: 5px; }
         .custom-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15); }
@@ -104,8 +106,9 @@
         .step1-choice-btn:hover { background: rgba(16, 185, 129, 0.15); border-color: #10b981; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2); }
         .step1-choice-btn:active { transform: translateY(1px); }
         
+        /* 💡 메인 "배치하기" 버튼 개선: 더 밝고 눈에 띄게 */
         .btn-shuffle { 
-            background: linear-gradient(135deg, var(--primary), var(--primary-hover)); 
+            background: linear-gradient(135deg, #06b6d4, #22d3ee); /* 더 밝은 아쿠아 시안 */
             color: #0f172a; 
             font-size: 1.25rem; 
             font-weight: 900; 
@@ -115,16 +118,16 @@
             border-radius: 12px; 
             cursor: pointer; 
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 8px 25px rgba(34, 211, 238, 0.3); 
+            box-shadow: 0 8px 25px var(--primary-glow); /* 시안 그림자 */
             width: 100%;
         }
-        .btn-shuffle:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(34, 211, 238, 0.5); }
+        .btn-shuffle:hover { background: linear-gradient(135deg, #22d3ee, #67e8f9); transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px var(--primary-glow); }
         .btn-shuffle:active { transform: translateY(1px); }
         
         .btn-step3 { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; font-size: 1rem; font-weight: 800; padding: 15px; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center; flex: 1;}
         .btn-step3:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35); }
 
-        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 16px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 70px; line-height: 1.5; transition: border-color 0.3s; }
+        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 166px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 70px; line-height: 1.5; transition: border-color 0.3s; }
         .custom-message-input:focus { outline: none; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15); }
         
         .checkbox-label { display: flex; align-items: center; gap: 12px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.2); padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.2s; }
@@ -188,9 +191,32 @@
         .btn-include:hover { background: rgba(16, 185, 129, 0.4); color: #fff; }
 
         #gridColumnToggles { position: absolute; top: 0; left: 0; width: 100%; height: 0; display: grid; pointer-events: none; z-index: 50; }
-        .aisle-toggle { width: 32px; height: 32px; background: var(--card-bg); border: 2px solid var(--primary); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: -1.5px; user-select: none; pointer-events: auto; margin-top: -16px; }
+        
+        /* 💡 통로 만들기 버튼 개선: 세련된 아이콘 디자인 */
+        .aisle-toggle { 
+            width: 32px; 
+            height: 32px; 
+            background: var(--card-bg); 
+            border: 2px solid var(--primary); 
+            color: var(--primary); 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
+            user-select: none; 
+            pointer-events: auto; 
+            margin-top: -16px; 
+        }
         .aisle-toggle.is-active { background: var(--primary); color: var(--bg-dark); }
         .aisle-toggle:hover { transform: scale(1.15) !important; box-shadow: 0 6px 15px rgba(34, 211, 238, 0.4); }
+        
+        .aisle-icon { width: 18px; height: 18px; }
+        .narrow-icon { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        .wide-icon { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
         @media print { #gridColumnToggles { display: none !important; } }
 
         .badge-container { position: absolute; bottom: 8px; left: 8px; display: flex; gap: 5px; flex-wrap: wrap; z-index: 10; pointer-events: auto; max-width: 90%; }
@@ -348,7 +374,7 @@
                         </div>
                         
                         <div class="accordion-content" style="display: none; margin-top: 15px;">
-                            <button type="button" class="btn btn-shuffle" style="margin-bottom: 22px; padding: 22px; font-size: 1.35rem; letter-spacing: 5px; font-weight: 900; box-shadow: 0 6px 20px rgba(34, 211, 238, 0.4);" onclick="startCountdownAndShuffle(event)">배 치 하 기</button>
+                            <button type="button" class="btn btn-shuffle" style="margin-bottom: 22px; padding: 22px; font-size: 1.35rem; letter-spacing: 5px; font-weight: 900; box-shadow: 0 6px 20px var(--primary-glow);" onclick="startCountdownAndShuffle(event)">배 치 하 기</button>
 
                             <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; font-weight: 800; padding-left: 4px; letter-spacing: 0.5px;">사전 조건 설정</div>
                             <div class="btn-row" style="margin-bottom: 15px; gap: 6px;">
@@ -487,10 +513,10 @@
                 <div class="accordion-content usage-tips" style="display: none; margin-top: 12px; background: transparent; padding: 0; border: none;">
                     <ul>
                         <li><span class="tip-title" style="color:#10b981;">[STEP 1 명단 준비]</span> 나이스 엑셀 명렬표(.xlsx) 또는 사진 폴더를 업로드하면 자동으로 세팅됩니다.</li>
-                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 통로 제어]</span> 자리가 생성되면 맨 윗줄의 <span style="color:#fff; font-weight:bold;">&lt;&gt;, &gt;&lt;</span> 아이콘을 눌러 실제 교실에 맞게 통로를 구성하세요.</li>
+                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 통로 제어]</span> 자리가 생성되면 맨 윗줄의 세련된 아이콘(벌리기/좁히기)을 눌러 실제 교실에 맞게 통로를 구성하세요.</li>
                         <li><span class="tip-title" style="color:var(--primary);">[STEP 2 조건 설정]</span> 앞줄, 짝꿍, 기피 설정 버튼을 켜고 대상을 클릭하세요. 지정된 통로를 인지하고 똑똑하게 배정됩니다.</li>
-                        <li><span class="tip-title" style="color:var(--near-color);">[STEP 2 인접 설정]</span> 특정 학생들을 앞뒤, 대각선 등 무조건 가까운 주위에 배치하고 싶을 때 사용하세요. (단, 옆자리인 '짝꿍'은 피해서 배치됩니다.)</li>
-                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 수동 고정]</span> 학생 자리의 [고정] 버튼을 누르거나 드래그로 위치를 바꿀 수 있습니다. 빈자리를 클릭하면 배정에서 완전히 제외됩니다.</li>
+                        <li><span class="tip-title" style="color:var(--near-color);">[STEP 2 인접 설정]</span> 특정 학생들을 앞뒤, 좌우, 대각선 등 1칸 반경 내에 무조건 가깝게 배치하고 싶을 때 사용하세요.</li>
+                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 수동 고정]</span> 학생 자리의 압정(📌) 버튼을 누르거나 드래그로 위치를 바꿀 수 있습니다. 빈자리를 클릭하면 배정에서 완전히 제외됩니다.</li>
                         <li><span class="tip-title" style="color:#f43f5e;">[STEP 3 인쇄/백업]</span> 사진을 숨기면 텍스트 전용 모드가 됩니다. 완성된 배치는 하단 '데이터 관리'에서 파일로 영구 백업하세요.</li>
                     </ul>
                 </div>
@@ -565,7 +591,9 @@
             if (!document.body.classList.contains('intro-mode')) return;
             document.body.classList.remove('intro-mode');
             
-            document.getElementById('welcomeActionGroup').style.display = 'none';
+            // 💡 선생님, 이 버튼 그룹을 다시 숨기지 않도록 수정했습니다.
+            // document.getElementById('welcomeActionGroup').style.display = 'none'; 
+            
             document.getElementById('mainText').style.display = 'block';
             
             const step1Section = document.querySelector('.step1');
@@ -1039,8 +1067,15 @@
                 const hasAisle = activeAisles[i];
                 const toggleBtn = document.createElement('div');
                 toggleBtn.className = 'aisle-toggle' + (hasAisle ? ' is-active' : '');
-                toggleBtn.innerHTML = hasAisle ? '><' : '<>';
-                toggleBtn.title = hasAisle ? '간격 붙이기' : '간격 띄우기';
+                
+                // 💡 선생님, 이모지 대신 세련된 아이콘을 사용하도록 수정했습니다.
+                if (hasAisle) {
+                    toggleBtn.innerHTML = '<svg class="aisle-icon wide-icon" viewBox="0 0 24 24"><path d="M18 15l3-3-3-3M6 15l-3-3 3-3M12 2v20M2 12h20"></path></svg>';
+                    toggleBtn.title = '간격 붙이기';
+                } else {
+                    toggleBtn.innerHTML = '<svg class="aisle-icon narrow-icon" viewBox="0 0 24 24"><path d="M6 9l-3 3 3 3M18 9l3 3-3 3M12 2v20M2 12h20"></path></svg>';
+                    toggleBtn.title = '간격 띄우기';
+                }
                 
                 if (hasAisle) {
                     wrapper.style.gridColumn = currentTrack + 1;
@@ -1193,7 +1228,7 @@
                     }
                     badgesHtml += '</div>';
 
-                    // 💡 압정 텍스트/이모지 수정
+                    // 💡 압정 이모지 사용 및 배경 블러 처리로 고급스럽게 복원
                     let pinBtnClass = seat.isPinned ? "pin-btn-container pinned-active" : "pin-btn-container";
                     let pinIcon = seat.isPinned ? "📌" : "📍";
                     contentHtml = `<div class="${pinBtnClass}" onclick="togglePin(event, ${idx})"><span class="pin-icon">${pinIcon}</span></div>
@@ -1510,7 +1545,6 @@
                     
                     let r1 = Math.floor(i / currentCols), c1 = i % currentCols;
                     
-                    // 💡 인접(Near) 알고리즘 재조정
                     if (s.nearGroups && s.nearGroups.length > 0) {
                         tempSeats.forEach((s2, j) => {
                             if (i !== j && s2 && s2.type === 'student' && s2.nearGroups) {
@@ -1518,13 +1552,12 @@
                                 if (hasSharedNear) {
                                     let r2 = Math.floor(j / currentCols), c2 = j % currentCols;
                                     
-                                    // 짝꿍(같은줄 인접) 조건 확인
                                     let isSideBySidePair = (r1 === r2) && (Math.abs(c1 - c2) === 1) && !activeAisles[Math.min(c1, c2)];
                                     
                                     if (Math.abs(r1 - r2) > 1 || Math.abs(c1 - c2) > 1) {
-                                        penalty += 80; // 1칸 반경(상하좌우/대각선)을 벗어나면 페널티
+                                        penalty += 80; 
                                     } else if (isSideBySidePair) {
-                                        penalty += 80; // 같은 줄에 바로 옆에 붙어있는 경우(짝꿍) 페널티! (대각선이나 앞/뒤/통로너머만 허용)
+                                        penalty += 80; 
                                     }
                                 }
                             }
