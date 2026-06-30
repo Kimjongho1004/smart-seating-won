@@ -53,8 +53,7 @@
         body.intro-mode .sidebar-right { margin-right: calc(-1 * var(--sidebar-right-width)); transform: translateX(100%); opacity: 0; pointer-events: none; }
         
         .welcome-character { max-width: 450px; height: auto; border-radius: 20px; filter: drop-shadow(0 0 40px rgba(34, 211, 238, 0.15)) drop-shadow(0 15px 25px rgba(0,0,0,0.5)); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.4s ease; }
-        body.intro-mode .welcome-character { filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.6)) drop-shadow(0 25px 35px rgba(0,0,0,0.6)); }
-
+        body.intro-mode .welcome-character:hover { transform: scale(1.03); filter: drop-shadow(0 0 50px rgba(34, 211, 238, 0.6)) drop-shadow(0 25px 35px rgba(0,0,0,0.7)); }
         
         .custom-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px 16px; color: var(--text-main); font-family: inherit; font-size: 1rem; transition: all 0.3s; margin-bottom: 5px; }
         .custom-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15); }
@@ -106,9 +105,8 @@
         .step1-choice-btn:hover { background: rgba(16, 185, 129, 0.15); border-color: #10b981; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(16, 185, 129, 0.2); }
         .step1-choice-btn:active { transform: translateY(1px); }
         
-        /* 💡 메인 "배치하기" 버튼 개선: 더 밝고 눈에 띄게 */
         .btn-shuffle { 
-            background: linear-gradient(135deg, #06b6d4, #22d3ee); /* 더 밝은 아쿠아 시안 */
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover)); 
             color: #0f172a; 
             font-size: 1.25rem; 
             font-weight: 900; 
@@ -118,16 +116,16 @@
             border-radius: 12px; 
             cursor: pointer; 
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 8px 25px var(--primary-glow); /* 시안 그림자 */
+            box-shadow: 0 8px 25px rgba(34, 211, 238, 0.3); 
             width: 100%;
         }
-        .btn-shuffle:hover { background: linear-gradient(135deg, #22d3ee, #67e8f9); transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px var(--primary-glow); }
+        .btn-shuffle:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 12px 30px rgba(34, 211, 238, 0.5); }
         .btn-shuffle:active { transform: translateY(1px); }
         
         .btn-step3 { background: linear-gradient(135deg, #f43f5e, #e11d48); color: white; font-size: 1rem; font-weight: 800; padding: 15px; border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.2); display: flex; align-items: center; justify-content: center; flex: 1;}
         .btn-step3:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35); }
 
-        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 166px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 70px; line-height: 1.5; transition: border-color 0.3s; }
+        .custom-message-input { width: 100%; box-sizing: border-box; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 16px; color: var(--text-main); font-family: inherit; font-size: 0.95rem; resize: none; height: 70px; line-height: 1.5; transition: border-color 0.3s; }
         .custom-message-input:focus { outline: none; border-color: #f43f5e; box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.15); }
         
         .checkbox-label { display: flex; align-items: center; gap: 12px; margin: 10px 0; cursor: pointer; background: rgba(0,0,0,0.2); padding: 14px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); transition: all 0.2s; }
@@ -191,32 +189,9 @@
         .btn-include:hover { background: rgba(16, 185, 129, 0.4); color: #fff; }
 
         #gridColumnToggles { position: absolute; top: 0; left: 0; width: 100%; height: 0; display: grid; pointer-events: none; z-index: 50; }
-        
-        /* 💡 통로 만들기 버튼 개선: 세련된 아이콘 디자인 */
-        .aisle-toggle { 
-            width: 32px; 
-            height: 32px; 
-            background: var(--card-bg); 
-            border: 2px solid var(--primary); 
-            color: var(--primary); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5); 
-            user-select: none; 
-            pointer-events: auto; 
-            margin-top: -16px; 
-        }
+        .aisle-toggle { width: 32px; height: 32px; background: var(--card-bg); border: 2px solid var(--primary); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 900; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.5); letter-spacing: -1.5px; user-select: none; pointer-events: auto; margin-top: -16px; }
         .aisle-toggle.is-active { background: var(--primary); color: var(--bg-dark); }
         .aisle-toggle:hover { transform: scale(1.15) !important; box-shadow: 0 6px 15px rgba(34, 211, 238, 0.4); }
-        
-        .aisle-icon { width: 18px; height: 18px; }
-        .narrow-icon { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-        .wide-icon { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-
         @media print { #gridColumnToggles { display: none !important; } }
 
         .badge-container { position: absolute; bottom: 8px; left: 8px; display: flex; gap: 5px; flex-wrap: wrap; z-index: 10; pointer-events: auto; max-width: 90%; }
@@ -237,7 +212,6 @@
 
         .edit-name-input { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 85%; padding: 12px 5px; font-size: 1.2rem; font-weight: 700; text-align: center; border: 3px solid var(--primary); border-radius: 8px; background: var(--bg-dark); color: white; z-index: 20; box-shadow: 0 10px 25px rgba(0,0,0,0.6); outline: none; font-family: inherit; }
         
-        /* 💡 압정 아이콘 복원 및 배경 블러 고급화 */
         .pin-btn-container { position: absolute; top: 8px; right: 8px; cursor: pointer; z-index: 10; width: var(--pin-size); height: var(--pin-size); display: flex; align-items: center; justify-content: center; background: rgba(15, 23, 42, 0.6); border-radius: 50%; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
         .pin-btn-container.pinned-active { background: var(--pinned-color); border-color: var(--pinned-color); box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
         .pin-btn-container:hover { background: rgba(15, 23, 42, 0.9); transform: scale(1.1); }
@@ -377,11 +351,11 @@
                             <button type="button" class="btn btn-shuffle" style="margin-bottom: 22px; padding: 22px; font-size: 1.35rem; letter-spacing: 5px; font-weight: 900; box-shadow: 0 6px 20px var(--primary-glow);" onclick="startCountdownAndShuffle(event)">배 치 하 기</button>
 
                             <div style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; font-weight: 800; padding-left: 4px; letter-spacing: 0.5px;">사전 조건 설정</div>
-                            <div class="btn-row" style="margin-bottom: 15px; gap: 6px;">
-                                <button type="button" id="frontModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px 2px; border: 1px solid var(--front-color); color: var(--front-color); background: transparent; font-weight:800;" onclick="toggleFrontMode()">앞줄 (OFF)</button>
-                                <button type="button" id="pairModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px 2px; border: 1px solid var(--pair-color); color: var(--pair-color); background: transparent; font-weight:800;" onclick="togglePairMode()">짝꿍 (OFF)</button>
-                                <button type="button" id="nearModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px 2px; border: 1px solid var(--near-color); color: var(--near-color); background: transparent; font-weight:800;" onclick="toggleNearMode()">인접 (OFF)</button>
-                                <button type="button" id="avoidModeBtn" class="btn btn-sub" style="font-size: 0.85rem; padding: 12px 2px; border: 1px solid var(--avoid-color); color: var(--avoid-color); background: transparent; font-weight:800;" onclick="toggleAvoidMode()">기피 (OFF)</button>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px;">
+                                <button type="button" id="frontModeBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 12px 5px; border: 1px solid var(--front-color); color: var(--front-color); background: transparent; font-weight:800;" onclick="toggleFrontMode()">앞줄 (OFF)</button>
+                                <button type="button" id="pairModeBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 12px 5px; border: 1px solid var(--pair-color); color: var(--pair-color); background: transparent; font-weight:800;" onclick="togglePairMode()">짝꿍 (OFF)</button>
+                                <button type="button" id="nearModeBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 12px 5px; border: 1px solid var(--near-color); color: var(--near-color); background: transparent; font-weight:800;" onclick="toggleNearMode()">인접 (OFF)</button>
+                                <button type="button" id="avoidModeBtn" class="btn btn-sub" style="font-size: 0.9rem; padding: 12px 5px; border: 1px solid var(--avoid-color); color: var(--avoid-color); background: transparent; font-weight:800;" onclick="toggleAvoidMode()">기피 (OFF)</button>
                             </div>
 
                             <hr style="border: 0; border-top: 1px dashed rgba(255,255,255,0.15); margin: 18px 0;">
@@ -513,10 +487,10 @@
                 <div class="accordion-content usage-tips" style="display: none; margin-top: 12px; background: transparent; padding: 0; border: none;">
                     <ul>
                         <li><span class="tip-title" style="color:#10b981;">[STEP 1 명단 준비]</span> 나이스 엑셀 명렬표(.xlsx) 또는 사진 폴더를 업로드하면 자동으로 세팅됩니다.</li>
-                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 통로 제어]</span> 자리가 생성되면 맨 윗줄의 세련된 아이콘(벌리기/좁히기)을 눌러 실제 교실에 맞게 통로를 구성하세요.</li>
+                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 통로 제어]</span> 자리가 생성되면 맨 윗줄의 <span style="color:#fff; font-weight:bold;">&lt;&gt;, &gt;&lt;</span> 아이콘을 눌러 실제 교실에 맞게 통로를 구성하세요.</li>
                         <li><span class="tip-title" style="color:var(--primary);">[STEP 2 조건 설정]</span> 앞줄, 짝꿍, 기피 설정 버튼을 켜고 대상을 클릭하세요. 지정된 통로를 인지하고 똑똑하게 배정됩니다.</li>
                         <li><span class="tip-title" style="color:var(--near-color);">[STEP 2 인접 설정]</span> 특정 학생들을 앞뒤, 좌우, 대각선 등 1칸 반경 내에 무조건 가깝게 배치하고 싶을 때 사용하세요.</li>
-                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 수동 고정]</span> 학생 자리의 압정(📌) 버튼을 누르거나 드래그로 위치를 바꿀 수 있습니다. 빈자리를 클릭하면 배정에서 완전히 제외됩니다.</li>
+                        <li><span class="tip-title" style="color:var(--primary);">[STEP 2 수동 고정]</span> 학생 자리의 압정(📌) 아이콘을 누르거나 드래그로 위치를 바꿀 수 있습니다. 빈자리를 클릭하면 배정에서 제외됩니다.</li>
                         <li><span class="tip-title" style="color:#f43f5e;">[STEP 3 인쇄/백업]</span> 사진을 숨기면 텍스트 전용 모드가 됩니다. 완성된 배치는 하단 '데이터 관리'에서 파일로 영구 백업하세요.</li>
                     </ul>
                 </div>
@@ -591,9 +565,7 @@
             if (!document.body.classList.contains('intro-mode')) return;
             document.body.classList.remove('intro-mode');
             
-            // 💡 선생님, 이 버튼 그룹을 다시 숨기지 않도록 수정했습니다.
-            // document.getElementById('welcomeActionGroup').style.display = 'none'; 
-            
+            document.getElementById('welcomeActionGroup').style.display = 'none';
             document.getElementById('mainText').style.display = 'block';
             
             const step1Section = document.querySelector('.step1');
@@ -1067,15 +1039,8 @@
                 const hasAisle = activeAisles[i];
                 const toggleBtn = document.createElement('div');
                 toggleBtn.className = 'aisle-toggle' + (hasAisle ? ' is-active' : '');
-                
-                // 💡 선생님, 이모지 대신 세련된 아이콘을 사용하도록 수정했습니다.
-                if (hasAisle) {
-                    toggleBtn.innerHTML = '<svg class="aisle-icon wide-icon" viewBox="0 0 24 24"><path d="M18 15l3-3-3-3M6 15l-3-3 3-3M12 2v20M2 12h20"></path></svg>';
-                    toggleBtn.title = '간격 붙이기';
-                } else {
-                    toggleBtn.innerHTML = '<svg class="aisle-icon narrow-icon" viewBox="0 0 24 24"><path d="M6 9l-3 3 3 3M18 9l3 3-3 3M12 2v20M2 12h20"></path></svg>';
-                    toggleBtn.title = '간격 띄우기';
-                }
+                toggleBtn.innerHTML = hasAisle ? '><' : '<>';
+                toggleBtn.title = hasAisle ? '간격 붙이기' : '간격 띄우기';
                 
                 if (hasAisle) {
                     wrapper.style.gridColumn = currentTrack + 1;
@@ -1228,7 +1193,6 @@
                     }
                     badgesHtml += '</div>';
 
-                    // 💡 압정 이모지 사용 및 배경 블러 처리로 고급스럽게 복원
                     let pinBtnClass = seat.isPinned ? "pin-btn-container pinned-active" : "pin-btn-container";
                     let pinIcon = seat.isPinned ? "📌" : "📍";
                     contentHtml = `<div class="${pinBtnClass}" onclick="togglePin(event, ${idx})"><span class="pin-icon">${pinIcon}</span></div>
@@ -1350,7 +1314,7 @@
                 return "X";
             });
             localStorage.setItem('secretSeatingPlan', JSON.stringify(secretPlanNames));
-            showCustomToast("ClassGrid v19.1 (Professional UI Update)\n선생님, 정말 고생 많으셨습니다! ✨");
+            showCustomToast("ClassGrid v20.0 (Master Polish 완벽 디자인)\n선생님, 정말 고생 많으셨습니다! ✨");
         }
 
         function triggerAnimation(element) {
@@ -1496,242 +1460,4 @@
                     let isAdjacent = (r1 === r2) && (Math.abs(idx1 - idx2) === 1);
                     
                     if (isAdjacent) {
-                        let minC = Math.min(c1, c2);
-                        if (activeAisles[minC]) isAdjacent = false;
-                    }
-
-                    if (!isAdjacent) {
-                        let getTargets = (c) => {
-                            let targets = [];
-                            if (c > 0 && !activeAisles[c - 1]) targets.push(c - 1);
-                            if (c < currentCols - 1 && !activeAisles[c]) targets.push(c + 1);
-                            return targets;
-                        };
-
-                        let validTargets1 = getTargets(c1).map(dc => idx1 - c1 + dc).filter(t => isMovable(seats[t]));
-                        if (validTargets1.length > 0) {
-                            let target = validTargets1[0];
-                            let temp = seats[idx2]; seats[idx2] = seats[target]; seats[target] = temp;
-                        } else {
-                            let validTargets2 = getTargets(c2).map(dc => idx2 - c2 + dc).filter(t => isMovable(seats[t]));
-                            if (validTargets2.length > 0) {
-                                let target = validTargets2[0];
-                                let temp = seats[idx1]; seats[idx1] = seats[target]; seats[target] = temp;
-                            }
-                        }
-                    }
-                }
-            }
-
-            renderGrid(true);
-            if (bestScore > 0) showCustomToast("복잡한 조건으로 인해 일부 완벽히 맞추지 못했을 수 있습니다. 재배치를 돌려보세요.");
-        }
-
-        function calcScore(tempSeats) {
-            let penalty = 0;
-            let pairMap = {};
-            
-            tempSeats.forEach((s, i) => {
-                if (s && s.type === 'student') {
-                    if (s.isFront) {
-                        let r = Math.floor(i / currentCols);
-                        if (r > 0) penalty += 5000 * r; 
-                    }
-
-                    if (s.pairId) {
-                        if (!pairMap[s.pairId]) pairMap[s.pairId] = [];
-                        pairMap[s.pairId].push(i);
-                    }
-                    
-                    let r1 = Math.floor(i / currentCols), c1 = i % currentCols;
-                    
-                    if (s.nearGroups && s.nearGroups.length > 0) {
-                        tempSeats.forEach((s2, j) => {
-                            if (i !== j && s2 && s2.type === 'student' && s2.nearGroups) {
-                                let hasSharedNear = s.nearGroups.some(g => s2.nearGroups.includes(g));
-                                if (hasSharedNear) {
-                                    let r2 = Math.floor(j / currentCols), c2 = j % currentCols;
-                                    
-                                    let isSideBySidePair = (r1 === r2) && (Math.abs(c1 - c2) === 1) && !activeAisles[Math.min(c1, c2)];
-                                    
-                                    if (Math.abs(r1 - r2) > 1 || Math.abs(c1 - c2) > 1) {
-                                        penalty += 80; 
-                                    } else if (isSideBySidePair) {
-                                        penalty += 80; 
-                                    }
-                                }
-                            }
-                        });
-                    }
-
-                    if (s.avoidGroups && s.avoidGroups.length > 0) {
-                        tempSeats.forEach((s2, j) => {
-                            if (i !== j && s2 && s2.type === 'student' && s2.avoidGroups) {
-                                let hasSharedAvoid = s.avoidGroups.some(g => s2.avoidGroups.includes(g));
-                                if (hasSharedAvoid) {
-                                    let r2 = Math.floor(j / currentCols), c2 = j % currentCols;
-                                    if (Math.abs(r1 - r2) <= 1 && Math.abs(c1 - c2) <= 1) {
-                                        penalty += 50; 
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            });
-
-            for (let pId in pairMap) {
-                let arr = pairMap[pId];
-                if (arr.length === 2) {
-                    let r1 = Math.floor(arr[0] / currentCols), c1 = arr[0] % currentCols;
-                    let r2 = Math.floor(arr[1] / currentCols), c2 = arr[1] % currentCols;
-                    
-                    let isAdjacent = (r1 === r2) && (Math.abs(arr[0] - arr[1]) === 1);
-                    
-                    if (isAdjacent) {
-                        let minC = Math.min(c1, c2);
-                        if (activeAisles[minC]) isAdjacent = false; 
-                    }
-                    
-                    if (!isAdjacent) penalty += 100;
-                }
-            }
-            return penalty;
-        }
-
-        function showCustomToast(msg) {
-            const toast = document.getElementById('customToast');
-            toast.innerText = msg; toast.classList.add('show'); 
-            setTimeout(() => toast.classList.remove('show'), 3500);
-        }
-
-        function downloadBackupFile() {
-            if (seats.length === 0 || students.length === 0) { return showCustomToast("먼저 엑셀을 업로드하거나 이름을 입력해 주세요."); }
-            const classInfo = document.getElementById('classInfoInput').value.trim();
-            const fileName = classInfo ? `${classInfo}_좌석백업.json` : "좌석배치백업.json";
-            
-            const planData = seats.map(s => {
-                if (s.type === 'student') return { id: getUid(s), isFront: s.isFront || false, pairId: s.pairId || null, nearGroups: s.nearGroups || [], avoidGroups: s.avoidGroups || [] };
-                if (s.type === 'empty' && s.isExcluded) return "EXCLUDED";
-                return "X";
-            });
-            const payload = { c: currentCols, r: currentRows, p: planData, a: activeAisles };
-            
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(payload));
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", dataStr);
-            downloadAnchorNode.setAttribute("download", fileName);
-            document.body.appendChild(downloadAnchorNode); 
-            downloadAnchorNode.click(); downloadAnchorNode.remove();
-            
-            showCustomToast(`[${fileName}] 파일이 저장되었습니다.`);
-        }
-
-        document.getElementById('backupInput').addEventListener('change', function(e) {
-            if (document.body.classList.contains('intro-mode')) startApp(); 
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    const savedData = JSON.parse(event.target.result);
-                    currentCols = savedData.c; currentRows = savedData.r;
-                    document.getElementById('colInput').value = currentCols; document.getElementById('rowInput').value = currentRows;
-                    
-                    activeAisles = savedData.a || new Array(Math.max(0, currentCols - 1)).fill(false);
-                    
-                    applyGridStyle(); document.getElementById('emptyState').style.display = 'none';
-
-                    seats = savedData.p.map(item => {
-                        if (item === "X") return { type: 'empty', isExcluded: false };
-                        if (item === "EXCLUDED") return { type: 'empty', isExcluded: true };
-                        
-                        let nameRaw = typeof item === 'string' ? item : item.id;
-                        let pId = typeof item === 'object' ? item.pairId : null;
-                        let nGroups = typeof item === 'object' ? (item.nearGroups || []) : [];
-                        let aGroups = typeof item === 'object' ? (item.avoidGroups || []) : [];
-                        let iFront = typeof item === 'object' ? (item.isFront || false) : false;
-                        
-                        let number = '', name = nameRaw;
-                        const match = nameRaw.match(/^(\d+)[_.\-\s]*(.+)$/);
-                        if (match) { number = match[1]; name = match[2]; }
-
-                        const foundStudent = students.find(st => st.name === name && st.number === number) || students.find(st => st.name === nameRaw);
-                        return foundStudent ? { type: 'student', ...foundStudent, isPinned: false, isFront: iFront, pairId: pId, nearGroups: nGroups, avoidGroups: aGroups } 
-                                            : { type: 'student', name: name, number: number, imgSrc: defaultAvatar, isPinned: false, isFront: iFront, pairId: pId, nearGroups: nGroups, avoidGroups: aGroups };
-                    });
-                    
-                    syncStudentsArray(); 
-                    renderColumnToggles();
-                    renderGrid(true); showCustomToast("통로와 배치를 포함하여 성공적으로 복구했습니다.");
-                } catch(err) { showCustomToast("파일을 읽을 수 없습니다. 올바른 백업 파일인지 확인해 주세요."); }
-            };
-            reader.readAsText(file); e.target.value = ''; 
-        });
-
-        function toggleFitScreen() {
-            isFitScreen = !isFitScreen;
-            const body = document.getElementById('bodyTag');
-            const btn = document.getElementById('fitScreenBtn');
-            if (isFitScreen) {
-                body.classList.add('fit-screen');
-                btn.innerHTML = '일반화면 복귀'; btn.style.background = 'rgba(0,0,0,0.2)'; btn.style.color = '#fff';
-            } else {
-                body.classList.remove('fit-screen');
-                btn.innerHTML = '전체화면'; btn.style.background = 'rgba(0,0,0,0.25)'; btn.style.color = '#fff';
-            }
-        }
-
-        function openModal(mode) { window.currentMode = mode; document.getElementById('modal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
-        function runAction(type) {
-            const grid = document.getElementById('seatGrid');
-            const podium = document.getElementById('dynamicPodium');
-            const area = document.getElementById('captureArea');
-            const isT = (window.currentMode === 'teacher');
-            if (isT) {
-                const clones = Array.from(grid.children).reverse();
-                grid.innerHTML = ''; 
-                clones.forEach((c, idx) => {
-                    let colIdx = idx % currentCols;
-                    let aislesBefore = 0;
-                    for (let x = 0; x < colIdx; x++) { if (activeAisles[x]) aislesBefore++; }
-                    c.style.gridColumn = (colIdx + aislesBefore + 1);
-                    grid.appendChild(c);
-                });
-                podium.style.setProperty('margin', '20px auto 30px auto', 'important');
-                grid.insertAdjacentElement('afterend', podium);
-            }
-            closeModal();
-            if (type === 'print') {
-                setTimeout(() => { window.print(); restoreLayout(isT); }, 500);
-            } else {
-                document.getElementById('bottomLogo').style.display = 'flex';
-                html2canvas(area, { scale: 2 }).then(canvas => {
-                    const a = document.createElement('a'); a.href = canvas.toDataURL(); a.download = '좌석배치도.png'; a.click();
-                    document.getElementById('bottomLogo').style.display = 'none'; restoreLayout(isT);
-                });
-            }
-        }
-        function restoreLayout(isT) {
-            if (isT) {
-                const grid = document.getElementById('seatGrid');
-                const clones = Array.from(grid.children).reverse();
-                grid.innerHTML = ''; 
-                clones.forEach((c, idx) => {
-                    let colIdx = idx % currentCols;
-                    let aislesBefore = 0;
-                    for (let x = 0; x < colIdx; x++) { if (activeAisles[x]) aislesBefore++; }
-                    c.style.gridColumn = (colIdx + aislesBefore + 1);
-                    grid.appendChild(c);
-                });
-                const podium = document.getElementById('dynamicPodium');
-                podium.style.setProperty('margin', '0 auto 30px auto', 'important');
-                document.getElementById('captureArea').insertBefore(podium, document.getElementById('emptyState'));
-            }
-        }
-    </script>
-</body>
-</html>
+                        let minC = Math.min
